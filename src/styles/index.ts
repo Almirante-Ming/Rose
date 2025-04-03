@@ -1,4 +1,2 @@
-export { containerStyles } from './containerStyles';
-export { modalStyles } from './modalStyles';
-export { textStyles } from './textStyles';
-export { cardStyles } from './cardStyles';
+export { nfound_styles } from "./nfound_styles";
+export { rose_home } from "./rose_home";
