@@ -26,7 +26,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="about"
         options={{
           title: 'About',
@@ -34,7 +34,7 @@ export default function TabLayout() {
             <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 }
