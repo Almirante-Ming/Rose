@@ -1,13 +1,15 @@
+import { rose_theme } from '@constants/rose_theme';
+
 export const rose_callendar = {
-    backgroundColor: '#A80742',
-    calendarBackground: '#810e13',
+    backgroundColor: rose_theme.rose_darkest,
+    calendarBackground: rose_theme.rose_main,
     textSectionTitleColor: '#FFFFFF',
-    selectedDayBackgroundColor: '#FF6347',
+    selectedDayBackgroundColor: rose_theme.rose_lightest,
     selectedDayTextColor: '#FFFFFF',
     todayTextColor: '#FFA500',
     dayTextColor: '#FFFFFF',
     textDisabledColor: '#666666',
-    dotColor: '#FF6347',
+    dotColor: rose_theme.rose_lightest,
     selectedDotColor: '#FFFFFF',
     arrowColor: '#FFA500',
     monthTextColor: '#FFFFFF',

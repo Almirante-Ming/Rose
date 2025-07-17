@@ -1,8 +1,11 @@
-import { View, Text, FlatList, Modal, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, FlatList, Modal, TouchableOpacity, Animated, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { rose_home, rose_callendar } from '@/styles';
 import { Note,NotesData,CalendarDay } from '@constants/types';
+import { schedulesService } from '@/services';
+import { useAuth } from '@/contexts';
+import { rose_theme } from '@constants/rose_theme';
 
 export default function Home() {
     const [selectedDate, setSelectedDate] = useState<string>('');
@@ -12,22 +15,43 @@ export default function Home() {
     const [notes, setNotes] = useState<NotesData>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    useEffect(() => {
+    const { isAuthenticated, user, logout } = useAuth();
+
+    const fetchSchedules = async () => {
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            // Check if user is authenticated
+            if (!isAuthenticated) {
+                Alert.alert('Erro', 'Usuário não autenticado. Faça login novamente.');
+                setIsLoading(false);
+                return;
+            }
+
+            // Fetch schedules from API
+            const schedulesData = await schedulesService.getUserSchedules();
+            setNotes(schedulesData);
+        } catch (error) {
+            console.error('Error fetching schedules:', error);
+            Alert.alert('Erro', 'Não foi possível carregar os agendamentos. Tente novamente.');
+            
+            // Fallback to mock data for development/testing
             setNotes({
                 '2025-04-24': [
                     { time: '08:00', subject: 'Leg-Press', location: 'Instrutora: Mariana', note: '2 séries, 14 repetições' },
                     { time: '08:40', subject: 'Elevacao lateral', location: 'Instrutora: Juliano', note: '4 séries, 12 repetições' },
-                    
                 ],
                 '2025-04-26': [
                     { time: '09:15', subject: 'Checkup', location: 'Laboratório A', note: 'jejum de 6 horas antes do exame' },
                     { time: '13:40', subject: 'ED. FIsica', location: 'Sala 10', note: 'intervalo de 3 minutos entre as duas series' },
                 ],
             });
+        } finally {
             setIsLoading(false);
-        }, 1000);
+        }
+    };
+
+    useEffect(() => {
+        fetchSchedules();
     }, []);
 
     const formatDate = (dateString: string): string => {
@@ -61,11 +85,49 @@ export default function Home() {
         });
     };
 
+    const handleLogout = () => {
+        Alert.alert(
+            'Sair',
+            'Tem certeza que deseja sair?',
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Sair',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            await logout();
+                        } catch (error) {
+                            console.error('Logout error:', error);
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
     return (
         <View style={rose_home.container}>
+            {/* Header with user info and logout */}
+            <View style={rose_home.header}>
+                <View style={rose_home.userInfo}>
+                    <Text style={rose_home.welcomeText}>Olá, {user?.email || 'Usuário'}</Text>
+                    <Text style={rose_home.roleText}>
+                        {user?.role.name === 'admin' ? 'Administrador' : 
+                         user?.role.name === 'trainer' ? 'Instrutor' : 'Usuário'}
+                    </Text>
+                </View>
+                <TouchableOpacity style={rose_home.logoutButton} onPress={handleLogout}>
+                    <Text style={rose_home.logoutText}>Sair</Text>
+                </TouchableOpacity>
+            </View>
+
             <Calendar
                 onDayPress={handleDayPress}
-                markedDates={{[selectedDate]: { selected: true, selectedColor: '#FF6347' },}}
+                markedDates={{[selectedDate]: { selected: true, selectedColor: rose_theme.rose_lightest },}}
                 theme={rose_callendar}
             />
             

@@ -1,0 +1,1 @@
+export const tinto = 'https://ec16af372594.ngrok-free.app'

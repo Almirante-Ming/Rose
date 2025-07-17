@@ -5,7 +5,39 @@ export const rose_home = StyleSheet.create({
 container: { 
     flex: 1,
     padding: 20, 
-    backgroundColor: '#640D14' 
+    backgroundColor: rose_theme.rose_dark
+},
+header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 5,
+    marginBottom: 20,
+},
+userInfo: {
+    flex: 1,
+},
+welcomeText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 2,
+},
+roleText: {
+    fontSize: 14,
+    color: '#CCCCCC',
+},
+logoutButton: {
+    backgroundColor: rose_theme.rose_light,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 6,
+},
+logoutText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
 },
 modalBackground: { 
     position: 'absolute', 
