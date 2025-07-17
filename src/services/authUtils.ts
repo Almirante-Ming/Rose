@@ -1,4 +1,5 @@
-import { authService, apiService } from '@/services';
+import { authService } from './authService';
+import { apiService } from './apiService';
 
 export interface LoginCredentials {
     emailOrPhone: string;

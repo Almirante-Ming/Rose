@@ -1,14 +1,7 @@
-import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
+import { useState } from 'react';
+import { View,Text,TextInput,TouchableOpacity,
     Alert,
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView
+    ActivityIndicator,KeyboardAvoidingView,Platform,ScrollView
 } from 'react-native';
 import { router } from 'expo-router';
 import { loginStyles } from '@/styles';
@@ -43,7 +36,6 @@ export default function LoginScreen() {
             const result = await login(emailOrPhone.trim(), password.trim(), persistLogin);
 
             if (result.success) {
-                // Navigation is handled by AuthNavigator
             } else {
                 setError(result.error || 'Erro no login');
             }
@@ -91,8 +83,8 @@ export default function LoginScreen() {
                 keyboardShouldPersistTaps="handled"
             >
                 <View>
-                    <Text style={loginStyles.logo}>Rose Gym</Text>
-                    <Text style={loginStyles.subtitle}>Entre para acessar seus agendamentos</Text>
+                    <Text style={loginStyles.logo}>Rosè</Text>
+                    <Text style={loginStyles.subtitle}>Entre para acessar suas aulas</Text>
 
                     {error ? <Text style={loginStyles.errorText}>{error}</Text> : null}
 
@@ -121,7 +113,7 @@ export default function LoginScreen() {
                                 style={[
                                     loginStyles.input,
                                     passwordFocused && loginStyles.inputFocused,
-                                    { paddingRight: 60 } // Space for toggle button
+                                    { paddingRight: 60 }
                                 ]}
                                 value={password}
                                 onChangeText={setPassword}
@@ -190,11 +182,11 @@ export default function LoginScreen() {
                         </Text>
                     ) : null}
 
-                    <TouchableOpacity onPress={() => Alert.alert('Recuperar Senha', 'Funcionalidade em desenvolvimento')}>
+                    {/* <TouchableOpacity onPress={() => Alert.alert('Recuperar Senha', 'Funcionalidade em desenvolvimento')}>
                         <Text style={loginStyles.forgotPassword}>
                             Esqueci minha senha
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </ScrollView>
 

@@ -128,7 +128,11 @@ export const authService = {
             if (!token) return null;
 
             const decoded = this.parseJwtToken(token);
-            return decoded?.user_id || null;
+            console.log('Decoded JWT payload:', decoded); // Debug log
+            const userId = decoded?.user_id;
+            console.log('Extracted user ID:', userId, 'type:', typeof userId); // Debug log
+            
+            return userId !== undefined && userId !== null ? userId : null;
         } catch (error) {
             console.error('Error getting user ID from token:', error);
             return null;

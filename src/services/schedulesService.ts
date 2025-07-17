@@ -12,10 +12,11 @@ export const schedulesService = {
         try {
             const userId = await authService.getUserId();
             
-            if (userId === null) {
+            if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
 
+            console.log('Fetching schedules for user ID:', userId); // Debug log
             const schedules: ScheduleResponse = await apiService.get(`/schedules/${userId}`);
             return schedules;
         } catch (error) {
@@ -29,7 +30,7 @@ export const schedulesService = {
         try {
             const userId = await authService.getUserId();
             
-            if (userId === null) {
+            if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
 
@@ -48,7 +49,7 @@ export const schedulesService = {
         try {
             const userId = await authService.getUserId();
             
-            if (userId === null) {
+            if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
 
@@ -68,7 +69,7 @@ export const schedulesService = {
         try {
             const userId = await authService.getUserId();
             
-            if (userId === null) {
+            if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
 
@@ -85,7 +86,7 @@ export const schedulesService = {
         try {
             const userId = await authService.getUserId();
             
-            if (userId === null) {
+            if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
 
