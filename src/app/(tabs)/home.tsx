@@ -7,6 +7,7 @@ import { Note,NotesData,CalendarDay } from '@constants/types';
 export default function Home() {
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [selectedNote, setSelectedNote] = useState<Note | null>(null);
     const [backgroundOpacity] = useState(new Animated.Value(0));
     const [notes, setNotes] = useState<NotesData>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,6 +38,10 @@ export default function Home() {
 
     const handleDayPress = (day: CalendarDay) => {
         setSelectedDate(day.dateString);
+    };
+
+    const handleNotePress = (note: Note) => {
+        setSelectedNote(note);
         setModalVisible(true);
         Animated.timing(backgroundOpacity, {
             toValue: 0.5,
@@ -50,7 +55,10 @@ export default function Home() {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
-        }).start(() => setModalVisible(false));
+        }).start(() => {
+            setModalVisible(false);
+            setSelectedNote(null);
+        });
     };
 
     return (
@@ -61,6 +69,41 @@ export default function Home() {
                 theme={rose_callendar}
             />
             
+            <View style={rose_home.notesSection}>
+                <Text style={rose_home.notesSectionTitle}>
+                    {selectedDate ? `Aulas do dia ${formatDate(selectedDate)}` : 'Selecione uma data'}
+                </Text>
+
+                {isLoading ? (
+                    <Text style={rose_home.loadingText}>Carregando...</Text>
+                ) : (
+                    <FlatList
+                        data={notes[selectedDate] || []}
+                        keyExtractor={(_, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity 
+                                style={rose_home.noteCard}
+                                onPress={() => handleNotePress(item)}
+                            >
+                                <View style={rose_home.noteCardLeft}>
+                                    <Text style={rose_home.noteCardTime}>{item.time}</Text>
+                                    <Text style={rose_home.noteCardSubject}>{item.subject}</Text>
+                                </View>
+                                <View style={rose_home.noteCardRight}>
+                                    <Text style={rose_home.noteCardLocation}>{item.location}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        ListEmptyComponent={
+                            selectedDate ? 
+                                <Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text> :
+                                <Text style={rose_home.emptyText}>Selecione uma data para ver as aulas</Text>
+                        }
+                    />
+                )}
+            </View>
+            
             <Modal
                 visible={modalVisible}
                 transparent
@@ -70,29 +113,28 @@ export default function Home() {
                 <Animated.View style={[rose_home.modalBackground, { opacity: backgroundOpacity }]} />
                 <TouchableOpacity style={rose_home.modalWrapper} activeOpacity={1} onPress={closeModal}>
                     <View style={rose_home.modalContainer}>
-                        <Text style={rose_home.title}>Aulas do dia {formatDate(selectedDate)}</Text>
-
-                        {isLoading ? (
-                            <Text style={rose_home.loadingText}>Carregando...</Text>
-                        ) : (
-                            <FlatList
-                                data={notes[selectedDate] || []}
-                                keyExtractor={(_, index) => index.toString()}
-                                showsVerticalScrollIndicator={false}
-                                renderItem={({ item }) => (
-                                    <View style={rose_home.card}>
-                                        <View style={rose_home.cardLeft}>
-                                            <Text style={rose_home.cardTime}>{item.time}</Text>
-                                            <Text style={rose_home.cardSubject}>{item.subject}</Text>
-                                        </View>
-                                        <View style={rose_home.cardRight}>
-                                            <Text style={rose_home.cardLocation}>{item.location}</Text>
-                                            <Text style={rose_home.cardNote}>{item.note}</Text>
-                                        </View>
+                        {selectedNote && (
+                            <>
+                                <Text style={rose_home.modalTitle}>Detalhes da Aula</Text>
+                                <View style={rose_home.modalContent}>
+                                    <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Horário:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.time}</Text>
                                     </View>
-                                )}
-                                ListEmptyComponent={<Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text>}
-                            />
+                                    <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Aula:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.subject}</Text>
+                                    </View>
+                                    <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Local:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.location}</Text>
+                                    </View>
+                                    <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Observações:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.note}</Text>
+                                    </View>
+                                </View>
+                            </>
                         )}
                     </View>
                 </TouchableOpacity>

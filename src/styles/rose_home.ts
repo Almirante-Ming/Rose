@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { rose_theme } from "@/constants/rose_theme";
 
 export const rose_home = StyleSheet.create({
 container: { 
@@ -59,7 +60,7 @@ cardTime: {
 cardSubject: { 
     fontSize: 18, 
     fontWeight: 'bold', 
-    color: '#ff5733', 
+    color: '#ae2831', 
     marginTop: 5 
 },
 cardLocation: { 
@@ -83,5 +84,92 @@ loadingText: {
     color: '#FFF', 
     textAlign: 'center', 
     marginTop: 20 
+},
+notesSection: {
+    flex: 1,
+    marginTop: 20,
+    backgroundColor: '#ae2831',
+    borderRadius: 15,
+    padding: 15,
+},
+notesSectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 15,
+},
+noteCard: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+},
+noteCardLeft: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    flex: 1,
+},
+noteCardRight: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    flex: 1,
+},
+noteCardTime: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+},
+noteCardSubject: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#810e13',
+    marginTop: 5,
+},
+noteCardLocation: {
+    fontSize: 14,
+    color: '#555',
+    fontStyle: 'italic',
+},
+modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#FFFFFF',
+    textAlign: 'center',
+},
+modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 20,
+},
+modalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    paddingBottom: 10,
+},
+modalLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    flex: 1,
+},
+modalValue: {
+    fontSize: 16,
+    color: '#666',
+    flex: 2,
+    textAlign: 'right',
 },
 });
