@@ -37,12 +37,12 @@ export default function Home() {
             // Fallback to mock data for development/testing
             setNotes({
                 '2025-04-24': [
-                    { time: '08:00', subject: 'Leg-Press', location: 'Instrutora: Mariana', note: '2 séries, 14 repetições' },
-                    { time: '08:40', subject: 'Elevacao lateral', location: 'Instrutora: Juliano', note: '4 séries, 12 repetições' },
+                    { dt_init: '2025-04-24', tm_init: '08:00', trainer_name: 'Mariana', customer_name: 'Cliente', machine_name: 'Leg-Press', message: '2 séries, 14 repetições' },
+                    { dt_init: '2025-04-24', tm_init: '08:40', trainer_name: 'Juliano', customer_name: 'Cliente', machine_name: 'Elevação lateral', message: '4 séries, 12 repetições' },
                 ],
                 '2025-04-26': [
-                    { time: '09:15', subject: 'Checkup', location: 'Laboratório A', note: 'jejum de 6 horas antes do exame' },
-                    { time: '13:40', subject: 'ED. FIsica', location: 'Sala 10', note: 'intervalo de 3 minutos entre as duas series' },
+                    { dt_init: '2025-04-26', tm_init: '09:15', trainer_name: 'Dr. Silva', customer_name: 'Cliente', machine_name: 'Laboratório A', message: 'jejum de 6 horas antes do exame' },
+                    { dt_init: '2025-04-26', tm_init: '13:40', trainer_name: 'Prof. Santos', customer_name: 'Cliente', machine_name: 'Sala 10', message: 'intervalo de 3 minutos entre as duas series' },
                 ],
             });
         } finally {
@@ -149,11 +149,11 @@ export default function Home() {
                                 onPress={() => handleNotePress(item)}
                             >
                                 <View style={rose_home.noteCardLeft}>
-                                    <Text style={rose_home.noteCardTime}>{item.time}</Text>
-                                    <Text style={rose_home.noteCardSubject}>{item.subject}</Text>
+                                    <Text style={rose_home.noteCardTime}>{item.tm_init}</Text>
+                                    <Text style={rose_home.noteCardSubject}>{item.machine_name}</Text>
                                 </View>
                                 <View style={rose_home.noteCardRight}>
-                                    <Text style={rose_home.noteCardLocation}>{item.location}</Text>
+                                    <Text style={rose_home.noteCardLocation}>{item.customer_name}</Text>
                                 </View>
                             </TouchableOpacity>
                         )}
@@ -180,20 +180,28 @@ export default function Home() {
                                 <Text style={rose_home.modalTitle}>Detalhes da Aula</Text>
                                 <View style={rose_home.modalContent}>
                                     <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Data:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.dt_init}</Text>
+                                    </View>
+                                    <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Horário:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.time}</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.tm_init}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
-                                        <Text style={rose_home.modalLabel}>Aula:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.subject}</Text>
+                                        <Text style={rose_home.modalLabel}>Treinador:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.trainer_name}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
-                                        <Text style={rose_home.modalLabel}>Local:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.location}</Text>
+                                        <Text style={rose_home.modalLabel}>Cliente:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.customer_name}</Text>
+                                    </View>
+                                    <View style={rose_home.modalRow}>
+                                        <Text style={rose_home.modalLabel}>Equipamento:</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.machine_name}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Observações:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.note}</Text>
+                                        <Text style={rose_home.modalValue}>{selectedNote.message}</Text>
                                     </View>
                                 </View>
                             </>

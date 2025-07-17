@@ -1,8 +1,10 @@
 export interface Note {
-    time: string;
-    subject: string;
-    location: string;
-    note: string;
+    dt_init: string;      // Date in string format
+    tm_init: string;      // Time in string format
+    trainer_name: string; // Trainer/instructor name
+    customer_name: string; // Customer name
+    machine_name: string; // Machine/equipment name
+    message: string;      // Additional message/notes
 }
 
 export interface NotesData {
