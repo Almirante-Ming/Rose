@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import { View,Text,TextInput,TouchableOpacity,
-    Alert,
-    ActivityIndicator,KeyboardAvoidingView,Platform,ScrollView,StatusBar
-} from 'react-native';
-import { router } from 'expo-router';
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar } from 'react-native';
 import { loginStyles } from '@/styles';
 import { useAuth } from '@/contexts';
 import { authUtils } from '@/services';
@@ -189,12 +185,6 @@ export default function LoginScreen() {
                             {statusMessage}
                         </Text>
                     ) : null}
-
-                    {/* <TouchableOpacity onPress={() => Alert.alert('Recuperar Senha', 'Funcionalidade em desenvolvimento')}>
-                        <Text style={loginStyles.forgotPassword}>
-                            Esqueci minha senha
-                        </Text>
-                    </TouchableOpacity> */}
                 </View>
             </ScrollView>
 

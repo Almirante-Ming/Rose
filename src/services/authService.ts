@@ -5,6 +5,8 @@ const TOKEN_KEY = 'jwt_token';
 const USER_KEY = 'user_data';
 const PERSIST_LOGIN_KEY = 'persist_login';
 
+
+// permissoes de navegacao, alterar quando criar as telas seguintes.
 const getUserRoleFromLevel = (level: number): UserRole => {
     switch (level) {
         case 0:
@@ -35,10 +37,8 @@ const getUserRoleFromLevel = (level: number): UserRole => {
 };
 
 export const authService = {
-    // Save JWT token to secure store
     async saveToken(token: string): Promise<void> {
         try {
-            console.log('Saving token:', typeof token, token); // Debug log
             
             if (typeof token !== 'string') {
                 throw new Error(`Token must be a string, received: ${typeof token}`);
@@ -51,7 +51,6 @@ export const authService = {
         }
     },
 
-    // Get JWT token from secure store
     async getToken(): Promise<string | null> {
         try {
             return await SecureStore.getItemAsync(TOKEN_KEY);
@@ -61,7 +60,6 @@ export const authService = {
         }
     },
 
-    // Save user data to secure store
     async saveUser(user: AuthUser): Promise<void> {
         try {
             await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
@@ -71,7 +69,6 @@ export const authService = {
         }
     },
 
-    // Get user data from secure store
     async getUser(): Promise<AuthUser | null> {
         try {
             const userData = await SecureStore.getItemAsync(USER_KEY);
@@ -82,7 +79,6 @@ export const authService = {
         }
     },
 
-    // Save persistent login preference
     async setPersistLogin(persist: boolean): Promise<void> {
         try {
             await SecureStore.setItemAsync(PERSIST_LOGIN_KEY, persist.toString());
@@ -92,7 +88,6 @@ export const authService = {
         }
     },
 
-    // Get persistent login preference
     async getPersistLogin(): Promise<boolean> {
         try {
             const persist = await SecureStore.getItemAsync(PERSIST_LOGIN_KEY);
@@ -103,7 +98,6 @@ export const authService = {
         }
     },
 
-    // Parse JWT token to get user info
     parseJwtToken(token: string): JwtPayload | null {
         try {
             const base64Url = token.split('.')[1];
@@ -121,16 +115,13 @@ export const authService = {
         }
     },
 
-    // Get user ID from stored token
     async getUserId(): Promise<number | null> {
         try {
             const token = await this.getToken();
             if (!token) return null;
 
             const decoded = this.parseJwtToken(token);
-            console.log('Decoded JWT payload:', decoded); // Debug log
             const userId = decoded?.user_id;
-            console.log('Extracted user ID:', userId, 'type:', typeof userId); // Debug log
             
             return userId !== undefined && userId !== null ? userId : null;
         } catch (error) {
@@ -139,7 +130,6 @@ export const authService = {
         }
     },
 
-    // Get user role from stored token
     async getUserRole(): Promise<UserRole | null> {
         try {
             const token = await this.getToken();
@@ -153,7 +143,6 @@ export const authService = {
         }
     },
 
-    // Create AuthUser from JWT token
     async createUserFromToken(token: string): Promise<AuthUser | null> {
         try {
             const decoded = this.parseJwtToken(token);
@@ -170,7 +159,6 @@ export const authService = {
         }
     },
 
-    // Check if token is expired
     isTokenExpired(token: string): boolean {
         try {
             const decoded = this.parseJwtToken(token);
@@ -184,14 +172,12 @@ export const authService = {
         }
     },
 
-    // Remove token and user data (logout)
     async logout(): Promise<void> {
         try {
             const persistLogin = await this.getPersistLogin();
             await SecureStore.deleteItemAsync(TOKEN_KEY);
             await SecureStore.deleteItemAsync(USER_KEY);
             
-            // Only clear persist login if user explicitly logs out
             if (!persistLogin) {
                 await SecureStore.deleteItemAsync(PERSIST_LOGIN_KEY);
             }
@@ -201,13 +187,11 @@ export const authService = {
         }
     },
 
-    // Check if user is authenticated
     async isAuthenticated(): Promise<boolean> {
         try {
             const token = await this.getToken();
             if (!token) return false;
 
-            // Check if token is expired
             if (this.isTokenExpired(token)) {
                 await this.logout();
                 return false;

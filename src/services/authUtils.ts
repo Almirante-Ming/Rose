@@ -8,38 +8,32 @@ export interface LoginCredentials {
 }
 
 export interface LoginResponse {
-    token?: string | any; // Make token more flexible to handle different response formats
+    token?: string | any;
     message?: string;
-    [key: string]: any; // Allow additional properties
+    [key: string]: any;
 }
 
 export interface ApiStatusResponse {
-    sucess: boolean; // Note: keeping original typo from your spec
+    sucess: boolean;
     message: string;
 }
 
 export const authUtils = {
-    // Login function
     async login(credentials: LoginCredentials): Promise<{ success: boolean; error?: string }> {
         try {
             const response = await apiService.postForm<LoginResponse>('/login', {
-                username: credentials.emailOrPhone, // Backend expects username field
+                username: credentials.emailOrPhone,
                 password: credentials.password
             });
             
-            console.log('Login response:', response); // Debug log
-            
-            // Try to extract token from different possible response structures
             let token: string | null = null;
             
             if (typeof response === 'string') {
                 token = response;
             } else if (response && typeof response === 'object') {
-                // Try different possible token field names
                 token = response.token || response.access_token || response.jwt || response.authToken;
             }
             
-            // Ensure token is a string
             if (token !== null && token !== undefined) {
                 token = String(token);
             }
@@ -49,16 +43,13 @@ export const authUtils = {
                 throw new Error('No valid token received from server');
             }
             
-            // Save token
             await authService.saveToken(token);
-            
-            // Create user from token and save
+
             const user = await authService.createUserFromToken(token);
             if (user) {
                 await authService.saveUser(user);
             }
             
-            // Save persistent login preference
             if (credentials.persistLogin !== undefined) {
                 await authService.setPersistLogin(credentials.persistLogin);
             }
@@ -71,7 +62,6 @@ export const authUtils = {
         }
     },
 
-    // Auto login for persistent users
     async autoLogin(): Promise<boolean> {
         try {
             const persistLogin = await authService.getPersistLogin();
@@ -84,7 +74,6 @@ export const authUtils = {
         }
     },
 
-    // Logout function
     async logout(): Promise<void> {
         try {
             await authService.logout();
@@ -94,27 +83,22 @@ export const authUtils = {
         }
     },
 
-    // Check authentication status
     async isAuthenticated(): Promise<boolean> {
         return await authService.isAuthenticated();
     },
 
-    // Get current user
     async getCurrentUser() {
         return await authService.getUser();
     },
 
-    // Get current user ID
     async getCurrentUserId(): Promise<number | null> {
         return await authService.getUserId();
     },
 
-    // Get current user role
     async getCurrentUserRole() {
         return await authService.getUserRole();
     },
 
-    // Check if user has specific permission
     async hasPermission(permission: string): Promise<boolean> {
         try {
             const role = await authService.getUserRole();
@@ -125,7 +109,6 @@ export const authUtils = {
         }
     },
 
-    // Check if user is admin
     async isAdmin(): Promise<boolean> {
         try {
             const role = await authService.getUserRole();
@@ -136,7 +119,6 @@ export const authUtils = {
         }
     },
 
-    // Check if user is trainer
     async isTrainer(): Promise<boolean> {
         try {
             const role = await authService.getUserRole();
@@ -147,7 +129,6 @@ export const authUtils = {
         }
     },
 
-    // Check API status
     async checkApiStatus(): Promise<{ success: boolean; message: string }> {
         try {
             const response = await apiService.get<ApiStatusResponse>('/');
@@ -155,7 +136,7 @@ export const authUtils = {
             if (response.sucess) {
                 return { success: true, message: 'Servidores em funcionamento' };
             } else {
-                return { success: false, message: 'Falha ao conectar ao Tinto, contacte o suporte' };
+                return { success: false, message: 'Servidores em manutencao, tente novamente mais tarde' };
             }
         } catch (error) {
             console.error('API status check failed:', error);

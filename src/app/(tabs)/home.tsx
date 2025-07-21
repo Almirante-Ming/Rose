@@ -20,31 +20,17 @@ export default function Home() {
     const fetchSchedules = async () => {
         setIsLoading(true);
         try {
-            // Check if user is authenticated
             if (!isAuthenticated) {
                 Alert.alert('Erro', 'Usuário não autenticado. Faça login novamente.');
                 setIsLoading(false);
                 return;
             }
 
-            // Fetch schedules from API
             const schedulesData = await schedulesService.getUserSchedules();
             setNotes(schedulesData);
         } catch (error) {
             console.error('Error fetching schedules:', error);
             Alert.alert('Erro', 'Não foi possível carregar os agendamentos. Tente novamente.');
-            
-            // Fallback to mock data for development/testing
-            setNotes({
-                '2025-04-24': [
-                    { dt_init: '2025-04-24', tm_init: '08:00', trainer_name: 'Mariana', customer_name: 'Cliente', machine_name: 'Leg-Press', message: '2 séries, 14 repetições' },
-                    { dt_init: '2025-04-24', tm_init: '08:40', trainer_name: 'Juliano', customer_name: 'Cliente', machine_name: 'Elevação lateral', message: '4 séries, 12 repetições' },
-                ],
-                '2025-04-26': [
-                    { dt_init: '2025-04-26', tm_init: '09:15', trainer_name: 'Dr. Silva', customer_name: 'Cliente', machine_name: 'Laboratório A', message: 'jejum de 6 horas antes do exame' },
-                    { dt_init: '2025-04-26', tm_init: '13:40', trainer_name: 'Prof. Santos', customer_name: 'Cliente', machine_name: 'Sala 10', message: 'intervalo de 3 minutos entre as duas series' },
-                ],
-            });
         } finally {
             setIsLoading(false);
         }
@@ -111,13 +97,12 @@ export default function Home() {
 
     return (
         <View style={rose_home.container}>
-            {/* Header with user info and logout */}
             <View style={rose_home.header}>
                 <View style={rose_home.userInfo}>
                     <Text style={rose_home.welcomeText}>Olá, {user?.email || 'Usuário'}</Text>
                     <Text style={rose_home.roleText}>
                         {user?.role.name === 'admin' ? 'Administrador' : 
-                         user?.role.name === 'trainer' ? 'Instrutor' : 'Usuário'}
+                         user?.role.name === 'trainer' ? 'Instrutor':''}
                     </Text>
                 </View>
                 <TouchableOpacity style={rose_home.logoutButton} onPress={handleLogout}>
@@ -159,8 +144,8 @@ export default function Home() {
                         )}
                         ListEmptyComponent={
                             selectedDate ? 
-                                <Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text> :
-                                <Text style={rose_home.emptyText}>Selecione uma data para ver as aulas</Text>
+                                <Text style={rose_home.emptyText}>Nenhuma aula registrada</Text> :
+                                <Text style={rose_home.emptyText}>Selecione outra data para verificar as aulas</Text>
                         }
                     />
                 )}
@@ -188,7 +173,7 @@ export default function Home() {
                                         <Text style={rose_home.modalValue}>{selectedNote.tm_init}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
-                                        <Text style={rose_home.modalLabel}>Treinador:</Text>
+                                        <Text style={rose_home.modalLabel}>Instrutor:</Text>
                                         <Text style={rose_home.modalValue}>{selectedNote.trainer_name}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>

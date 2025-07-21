@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { authUtils } from '@/services';
 import { AuthUser, UserRole } from '@constants/types';
 
@@ -33,7 +33,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             setIsLoading(true);
             
-            // Check for auto login
             const autoLoginSuccess = await authUtils.autoLogin();
             
             if (autoLoginSuccess) {
