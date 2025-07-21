@@ -6,20 +6,20 @@ const { width, height } = Dimensions.get('window');
 export const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
   logo: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: rose_theme.rose_main,
+    color: rose_theme.rose_lightest,
     textAlign: 'center',
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#b3b3b3',
     textAlign: 'center',
     marginBottom: 40,
   },
@@ -29,21 +29,25 @@ export const loginStyles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#e0e0e0',
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#404040',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#1e1e1e',
+    color: '#ffffff',
+  },
+  inputPlaceholder: {
+    color: '#e0e0e0',
   },
   inputFocused: {
-    borderColor: rose_theme.rose_main,
-    backgroundColor: '#fff',
+    borderColor: rose_theme.rose_light,
+    backgroundColor: '#2a2a2a',
   },
   passwordContainer: {
     position: 'relative',
@@ -55,7 +59,7 @@ export const loginStyles = StyleSheet.create({
     padding: 4,
   },
   passwordToggleText: {
-    color: rose_theme.rose_light,
+    color: rose_theme.rose_lightest,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -68,15 +72,15 @@ export const loginStyles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#ddd',
+    borderColor: '#606060',
     borderRadius: 4,
     marginRight: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxChecked: {
-    backgroundColor: rose_theme.rose_main,
-    borderColor: rose_theme.rose_main,
+    backgroundColor: rose_theme.rose_light,
+    borderColor: rose_theme.rose_light,
   },
   checkboxIcon: {
     color: '#fff',
@@ -85,7 +89,7 @@ export const loginStyles = StyleSheet.create({
   },
   checkboxLabel: {
     fontSize: 14,
-    color: '#666',
+    color: '#b3b3b3',
     flex: 1,
   },
   loginButton: {
@@ -96,7 +100,7 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#4a4a4a',
   },
   loginButtonText: {
     color: '#fff',
@@ -104,7 +108,7 @@ export const loginStyles = StyleSheet.create({
     fontWeight: '600',
   },
   statusButton: {
-    backgroundColor: rose_theme.rose_light,
+    backgroundColor: rose_theme.rose_dark,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
@@ -122,19 +126,19 @@ export const loginStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   statusSuccess: {
-    color: '#28a745',
+    color: '#4caf50',
   },
   statusError: {
-    color: '#dc3545',
+    color: '#f44336',
   },
   forgotPassword: {
     textAlign: 'center',
-    color: rose_theme.rose_main,
+    color: rose_theme.rose_lightest,
     fontSize: 14,
     textDecorationLine: 'underline',
   },
   errorText: {
-    color: '#ff4444',
+    color: '#f44336',
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 20,
@@ -145,12 +149,12 @@ export const loginStyles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   loadingContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#2a2a2a',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -158,6 +162,6 @@ export const loginStyles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#333',
+    color: '#e0e0e0',
   },
 });

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View,Text,TextInput,TouchableOpacity,
     Alert,
-    ActivityIndicator,KeyboardAvoidingView,Platform,ScrollView
+    ActivityIndicator,KeyboardAvoidingView,Platform,ScrollView,StatusBar
 } from 'react-native';
 import { router } from 'expo-router';
 import { loginStyles } from '@/styles';
@@ -74,10 +74,16 @@ export default function LoginScreen() {
     };
 
     return (
-        <KeyboardAvoidingView 
-            style={loginStyles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
+        <>
+            <StatusBar 
+                barStyle="light-content" 
+                backgroundColor="#121212"
+                translucent={false}
+            />
+            <KeyboardAvoidingView 
+                style={loginStyles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
             <ScrollView 
                 contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
                 keyboardShouldPersistTaps="handled"
@@ -100,6 +106,7 @@ export default function LoginScreen() {
                             onFocus={() => setEmailFocused(true)}
                             onBlur={() => setEmailFocused(false)}
                             placeholder="Digite seu email ou telefone"
+                            placeholderTextColor="#b3b3b3"
                             keyboardType="email-address"
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -120,6 +127,7 @@ export default function LoginScreen() {
                                 onFocus={() => setPasswordFocused(true)}
                                 onBlur={() => setPasswordFocused(false)}
                                 placeholder="Digite sua senha"
+                                placeholderTextColor="#b3b3b3"
                                 secureTextEntry={!showPassword}
                             />
                             <TouchableOpacity
@@ -199,5 +207,6 @@ export default function LoginScreen() {
                 </View>
             )}
         </KeyboardAvoidingView>
+        </>
     );
 }
