@@ -1,8 +1,11 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useAuth } from '@/contexts';
 
 
 export default function TabLayout() {
+  const { isAdmin } = useAuth();
+
   return (
     <Tabs
     screenOptions={{
@@ -26,6 +29,17 @@ export default function TabLayout() {
           ), headerShown: false
         }}
       />
+      {isAdmin() && (
+        <Tabs.Screen
+          name="personAdd"
+          options={{
+            title: 'Adicionar Pessoa',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'person-add' : 'person-add-outline'} color={color} size={24} />
+            ), headerShown: false
+          }}
+        />
+      )}
     </Tabs>
   );
 }

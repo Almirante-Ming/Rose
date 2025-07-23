@@ -33,3 +33,27 @@ export interface AuthUser {
     email: string;
     role: UserRole;
 }
+
+export interface PersonData {
+    cpf: string;
+    name: string;
+    email: string;
+    phone: string;
+    dt_birth: string;
+    state: 'active' | 'inactive';
+    p_type: 'customer' | 'trainer' | 'admin';
+    password: string;
+}
+
+export interface PersonResponse {
+    id: number;
+    cpf: string;
+    name: string;
+    email: string;
+    phone: string;
+    dt_birth: string;
+    state: string;
+    p_type: string;
+    created_at: string;
+    updated_at: string;
+}
