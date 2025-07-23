@@ -1,10 +1,11 @@
 export interface Note {
-    dt_init: string;      // Date in string format
-    tm_init: string;      // Time in string format
-    trainer_name: string; // Trainer/instructor name
-    customer_name: string; // Customer name
-    machine_name: string; // Machine/equipment name
-    message: string;      // Additional message/notes
+    date: any;
+    dt_init: string;
+    tm_init: string;
+    trainer_name: string;
+    customer_name: string;
+    machine_name: string;
+    message: string;
 }
 
 export interface NotesData {
@@ -16,12 +17,11 @@ export interface CalendarDay {
 }
 
 export interface JwtPayload {
-    sub: string; // email
+    sub: string;
     user_id: number;
-    acc_level: number; // 0 = user, 1 = trainer, 2 = admin
-    exp: number; // expiration timestamp
+    acc_level: number;
+    exp: number; 
 }
-
 export interface UserRole {
     level: number;
     name: 'user' | 'trainer' | 'admin';

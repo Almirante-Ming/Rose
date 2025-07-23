@@ -39,6 +39,12 @@ logoutText: {
     fontSize: 14,
     fontWeight: '600',
 },
+calendarContainer: {
+    backgroundColor: rose_theme.rose_light,
+    borderRadius: 15,
+    padding: 10,
+    marginBottom: 0,
+},
 modalBackground: { 
     position: 'absolute', 
     top: 0, 
@@ -165,6 +171,12 @@ noteCardSubject: {
     fontWeight: 'bold',
     color: '#810e13',
     marginTop: 5,
+},
+noteCardDate: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 3,
+    fontStyle: 'italic',
 },
 noteCardLocation: {
     fontSize: 14,

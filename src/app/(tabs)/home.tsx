@@ -94,6 +94,30 @@ export default function Home() {
         setSelectedDate(day.dateString);
     };
 
+    const getNextFiveNotes = (): Note[] => {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
+        const allNotes: (Note & { date: string })[] = [];
+        
+        Object.keys(notes).forEach(date => {
+            notes[date].forEach(note => {
+                allNotes.push({ ...note, date });
+            });
+        });
+        
+        const upcomingNotes = allNotes
+            .filter(note => note.date >= todayString)
+            .sort((a, b) => {
+                if (a.date !== b.date) {
+                    return a.date.localeCompare(b.date);
+                }
+                return a.tm_init.localeCompare(b.tm_init);
+            });
+        
+        return upcomingNotes.slice(0, 5);
+    };
+
     const handleNotePress = (note: Note) => {
         setSelectedNote(note);
         setModalVisible(true);
@@ -154,31 +178,33 @@ export default function Home() {
                 </TouchableOpacity>
             </View>
 
-            <Calendar
-                onDayPress={handleDayPress}
-                markedDates={{[selectedDate]: { selected: true, selectedColor: rose_theme.rose_lightest },}}
-                theme={rose_callendar}
-                monthFormat={'MMMM yyyy'}
-                disableMonthChange={false}
-                firstDay={0}
-                hideDayNames={false}
-                showWeekNumbers={false}
-                disableArrowLeft={false}
-                disableArrowRight={false}
-                enableSwipeMonths={true}
-            />
+            <View style={rose_home.calendarContainer}>
+                <Calendar
+                    onDayPress={handleDayPress}
+                    markedDates={{[selectedDate]: { selected: true, selectedColor: rose_theme.rose_lightest },}}
+                    theme={rose_callendar}
+                    monthFormat={'MMMM yyyy'}
+                    disableMonthChange={false}
+                    firstDay={0}
+                    hideDayNames={false}
+                    showWeekNumbers={false}
+                    disableArrowLeft={false}
+                    disableArrowRight={false}
+                    enableSwipeMonths={true}
+                />
+            </View>
             
             <View style={rose_home.notesSection}>
                 <Text style={rose_home.notesSectionTitle}>
-                    {selectedDate ? `Aulas do dia ${formatDate(selectedDate)}` : 'Selecione uma data'}
+                    {selectedDate ? `Aulas do dia ${formatDate(selectedDate)}` : 'Próximas aulas'}
                 </Text>
 
                 {isLoading ? (
                     <Text style={rose_home.loadingText}>Carregando...</Text>
                 ) : (
                     <FlatList
-                        data={notes[selectedDate] || []}
-                        keyExtractor={(_, index) => index.toString()}
+                        data={selectedDate ? notes[selectedDate] || [] : getNextFiveNotes()}
+                        keyExtractor={(item, index) => selectedDate ? index.toString() : `${item.date}-${index}`}
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <TouchableOpacity 
@@ -188,6 +214,9 @@ export default function Home() {
                                 <View style={rose_home.noteCardLeft}>
                                     <Text style={rose_home.noteCardTime}>{item.tm_init}</Text>
                                     <Text style={rose_home.noteCardSubject}>{item.machine_name}</Text>
+                                    {!selectedDate && (
+                                        <Text style={rose_home.noteCardDate}>{formatDate((item as any).date || item.dt_init)}</Text>
+                                    )}
                                 </View>
                                 <View style={rose_home.noteCardRight}>
                                     <Text style={rose_home.noteCardLocation}>{item.customer_name}</Text>
@@ -197,7 +226,7 @@ export default function Home() {
                         ListEmptyComponent={
                             selectedDate ? 
                                 <Text style={rose_home.emptyText}>Nenhuma aula registrada</Text> :
-                                <Text style={rose_home.emptyText}>Selecione outra data para verificar as aulas</Text>
+                                <Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text>
                         }
                     />
                 )}
@@ -233,7 +262,7 @@ export default function Home() {
                                         <Text style={rose_home.modalValue}>{selectedNote.customer_name}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
-                                        <Text style={rose_home.modalLabel}>Equipamento:</Text>
+                                        <Text style={rose_home.modalLabel}>tipo:</Text>
                                         <Text style={rose_home.modalValue}>{selectedNote.machine_name}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>

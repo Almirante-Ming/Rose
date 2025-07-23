@@ -1,8 +1,8 @@
 import { rose_theme } from '@constants/rose_theme';
 
 export const rose_callendar = {
-    backgroundColor: rose_theme.rose_darkest,
-    calendarBackground: rose_theme.rose_main,
+    backgroundColor: rose_theme.rose_main,
+    calendarBackground: rose_theme.rose_main,  
     textSectionTitleColor: '#FFFFFF',
     selectedDayBackgroundColor: rose_theme.rose_lightest,
     selectedDayTextColor: '#FFFFFF',
