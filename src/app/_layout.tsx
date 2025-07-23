@@ -1,4 +1,3 @@
-import { Stack } from 'expo-router';
 import { AuthProvider } from '@/contexts';
 import AuthNavigator from '@/components/AuthNavigator';
 

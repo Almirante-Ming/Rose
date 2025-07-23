@@ -40,6 +40,17 @@ export default function TabLayout() {
           }}
         />
       )}
+      {isAdmin() && (
+        <Tabs.Screen
+          name="person"
+          options={{
+            title: 'Lista de Pessoas',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'people' : 'people-outline'} color={color} size={24} />
+            ), headerShown: false
+          }}
+        />
+      )}
     </Tabs>
   );
 }

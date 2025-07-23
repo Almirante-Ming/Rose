@@ -54,6 +54,6 @@ export interface PersonResponse {
     dt_birth: string;
     state: string;
     p_type: string;
-    created_at: string;
-    updated_at: string;
+    dt_create: string;
+    dt_update: string;
 }
