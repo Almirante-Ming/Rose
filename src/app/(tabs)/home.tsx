@@ -1,11 +1,55 @@
-import { View, Text, FlatList, Modal, TouchableOpacity, Animated, Alert } from 'react-native';
+import { View, Text, FlatList, Modal, TouchableOpacity, Animated, Alert, Platform, NativeModules } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { rose_home, rose_callendar } from '@/styles';
 import { Note,NotesData,CalendarDay } from '@constants/types';
 import { schedulesService } from '@/services';
 import { useAuth } from '@/contexts';
 import { rose_theme } from '@constants/rose_theme';
+
+
+LocaleConfig.locales['pt'] = {
+    monthNames: [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ],
+    monthNamesShort: [
+        'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+        'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+    ],
+    dayNames: [
+        'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 
+        'Quinta-feira', 'Sexta-feira', 'Sábado'
+    ],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    today: 'Hoje'
+};
+
+const getSystemLocale = (): string => {
+    let locale = 'pt';
+    
+    try {
+        if (Platform.OS === 'ios') {
+            locale = NativeModules.SettingsManager?.settings?.AppleLocale ||
+                    NativeModules.SettingsManager?.settings?.AppleLanguages?.[0] || 'pt';
+        } else {
+            locale = NativeModules.I18nManager?.localeIdentifier || 'pt';
+        }
+        
+        locale = locale.split(/[-_]/)[0].toLowerCase();
+        
+        if (locale === 'pt') {
+            return 'pt';
+        }
+
+        return LocaleConfig.locales[locale] ? locale : 'en';
+    } catch (error) {
+        console.error(error);
+        return 'en';
+    }
+};
+
+LocaleConfig.defaultLocale = getSystemLocale();
 
 export default function Home() {
     const [selectedDate, setSelectedDate] = useState<string>('');
@@ -114,6 +158,14 @@ export default function Home() {
                 onDayPress={handleDayPress}
                 markedDates={{[selectedDate]: { selected: true, selectedColor: rose_theme.rose_lightest },}}
                 theme={rose_callendar}
+                monthFormat={'MMMM yyyy'}
+                disableMonthChange={false}
+                firstDay={0}
+                hideDayNames={false}
+                showWeekNumbers={false}
+                disableArrowLeft={false}
+                disableArrowRight={false}
+                enableSwipeMonths={true}
             />
             
             <View style={rose_home.notesSection}>
