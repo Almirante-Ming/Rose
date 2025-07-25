@@ -36,7 +36,6 @@ export default function LoginScreen() {
                 setError(result.error || 'Erro no login');
             }
         } catch (error) {
-            console.error('Login error:', error);
             setError('Erro de conexão. Tente novamente.');
         } finally {
             setIsLoading(false);

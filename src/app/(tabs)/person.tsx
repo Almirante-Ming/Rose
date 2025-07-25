@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
+import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity,RefreshControl} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { personsService } from '@/services';
 import { useAuth } from '@/contexts';
 import { rose_theme } from '@constants/rose_theme';
@@ -20,7 +13,6 @@ export default function Person() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Redirect if not admin
   if (!isAdmin()) {
     return (
       <View style={styles.container}>
@@ -39,7 +31,6 @@ export default function Person() {
       const data = await personsService.getPersons();
       setPersons(data);
     } catch (error: any) {
-      console.error('Error fetching persons:', error);
       Alert.alert(
         'Erro',
         error.response?.data?.message || 'Erro ao carregar lista de pessoas. Tente novamente.'
@@ -229,6 +220,10 @@ export default function Person() {
           </View>
         }
       />
+      
+      <TouchableOpacity style={styles.floatingButton} onPress={() => router.push('/personAdd')}>
+        <Ionicons name="add" size={28} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -254,6 +249,22 @@ const styles = {
   },
   refreshButton: {
     padding: 8,
+  },
+  floatingButton: {
+    position: 'absolute' as const,
+    bottom: 20,
+    right: 20,
+    backgroundColor: rose_theme.rose_lightest,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
   },
   statsContainer: {
     flexDirection: 'row' as const,

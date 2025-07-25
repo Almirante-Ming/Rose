@@ -1,7 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { rose_theme } from '@constants/rose_theme';
-
-const { width, height } = Dimensions.get('window');
 
 export const loginStyles = StyleSheet.create({
   container: {
@@ -41,9 +39,6 @@ export const loginStyles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#1e1e1e',
     color: '#ffffff',
-  },
-  inputPlaceholder: {
-    color: '#e0e0e0',
   },
   inputFocused: {
     borderColor: rose_theme.rose_light,
@@ -130,12 +125,6 @@ export const loginStyles = StyleSheet.create({
   },
   statusError: {
     color: '#f44336',
-  },
-  forgotPassword: {
-    textAlign: 'center',
-    color: rose_theme.rose_lightest,
-    fontSize: 14,
-    textDecorationLine: 'underline',
   },
   errorText: {
     color: '#f44336',

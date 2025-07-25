@@ -31,17 +31,6 @@ export default function TabLayout() {
       />
       {isAdmin() && (
         <Tabs.Screen
-          name="personAdd"
-          options={{
-            title: 'Adicionar Pessoa',
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'person-add' : 'person-add-outline'} color={color} size={24} />
-            ), headerShown: false
-          }}
-        />
-      )}
-      {isAdmin() && (
-        <Tabs.Screen
           name="person"
           options={{
             title: 'Lista de Pessoas',

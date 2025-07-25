@@ -13,6 +13,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
+import { router, Stack } from 'expo-router';
 import { personsService } from '@/services';
 import { useAuth } from '@/contexts';
 import { rose_theme } from '@constants/rose_theme';
@@ -38,13 +39,16 @@ export default function PersonAdd() {
 
   if (!isAdmin()) {
     return (
-      <View style={styles.container}>
-        <View style={styles.errorContainer}>
-          <Ionicons name="warning" size={48} color={rose_theme.rose_main} />
-          <Text style={styles.errorText}>Acesso negado</Text>
-          <Text style={styles.errorSubText}>Apenas administradores podem acessar esta página</Text>
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={styles.container}>
+          <View style={styles.errorContainer}>
+            <Ionicons name="warning" size={48} color={rose_theme.rose_main} />
+            <Text style={styles.errorText}>Acesso negado</Text>
+            <Text style={styles.errorSubText}>Apenas administradores podem acessar esta página</Text>
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 
@@ -115,18 +119,15 @@ export default function PersonAdd() {
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    console.log('Date change event:', event.type, selectedDate);
     const currentDate = selectedDate || parsedDate;
     
     if (event.type === 'dismissed') {
-      console.log('Date picker dismissed');
       setShowDatePicker(false);
       return;
     }
     
     if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split('T')[0];
-      console.log('Setting date:', formattedDate);
       setFormData(prev => ({ ...prev, dt_birth: formattedDate }));
       
       if (errors.dt_birth) {
@@ -134,7 +135,6 @@ export default function PersonAdd() {
       }
     }
     
-    // Always close on Android after selection
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
@@ -164,23 +164,12 @@ export default function PersonAdd() {
           {
             text: 'OK',
             onPress: () => {
-              setFormData({
-                cpf: '',
-                name: '',
-                email: '',
-                phone: '',
-                dt_birth: '',
-                state: 'active',
-                p_type: 'customer',
-                password: '',
-              });
-              setErrors({});
+              router.back();
             }
           }
         ]
       );
     } catch (error: any) {
-      console.error('Error adding person:', error);
       Alert.alert(
         'Erro',
         error.response?.data?.message || 'Erro ao adicionar pessoa. verifique os dados e tente novamente.'
@@ -192,7 +181,7 @@ export default function PersonAdd() {
 
   const formatDateForDisplay = (dateString: string): string => {
     if (!dateString) return '';
-    const date = new Date(dateString + 'T00:00:00'); // Add time to avoid timezone issues
+    const date = new Date(dateString + 'T00:00:00');
     return date.toLocaleDateString('pt-BR');
   };
 
@@ -205,19 +194,28 @@ export default function PersonAdd() {
   })();
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <KeyboardAvoidingView 
+        style={styles.container} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Ionicons name="person-add" size={32} color="#FFFFFF" />
-          <Text style={styles.title}>Adicionar Nova Pessoa</Text>
+          <View style={styles.headerRow}>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+            <View style={styles.headerContent}>
+              <Ionicons name="person-add" size={32} color="#FFFFFF" />
+              <Text style={styles.title}>Adicionar Nova Pessoa</Text>
+            </View>
+            <View style={styles.placeholder} />
+          </View>
         </View>
 
         <View style={styles.form}>
 
-          {/* Name */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Nome *</Text>
             <TextInput
@@ -229,7 +227,6 @@ export default function PersonAdd() {
             {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
           </View>
 
-          {/* Phone */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Telefone *</Text>
             <TextInput
@@ -242,7 +239,6 @@ export default function PersonAdd() {
             />
             {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
           </View>
-          {/* CPF */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>CPF *</Text>
             <TextInput
@@ -256,13 +252,11 @@ export default function PersonAdd() {
             {errors.cpf && <Text style={styles.errorText}>{errors.cpf}</Text>}
           </View>
 
-          {/* Birth Date */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Data de Nascimento *</Text>
             <TouchableOpacity
               style={[styles.input, styles.dateInput, errors.dt_birth && styles.inputError]}
               onPress={() => {
-                console.log('Date picker button pressed');
                 setShowDatePicker(true);
               }}
             >
@@ -286,7 +280,6 @@ export default function PersonAdd() {
             />
           )}
 
-          {/* Person Type */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Tipo de Pessoa</Text>
             <View style={styles.pickerContainer}>
@@ -302,7 +295,6 @@ export default function PersonAdd() {
             </View>
           </View>
 
-          {/* Email */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email *</Text>
             <TextInput
@@ -316,7 +308,6 @@ export default function PersonAdd() {
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
           </View>
 
-          {/* Password */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Senha *</Text>
             <TextInput
@@ -329,7 +320,6 @@ export default function PersonAdd() {
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
           </View>
 
-          {/* Submit Button */}
           <TouchableOpacity
             style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
             onPress={handleSubmit}
@@ -347,6 +337,7 @@ export default function PersonAdd() {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+    </>
   );
 }
 
@@ -360,15 +351,30 @@ const styles = {
     padding: 20,
   },
   header: {
-    alignItems: 'center' as const,
     marginBottom: 30,
     paddingTop: 20,
+  },
+  headerRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerContent: {
+    alignItems: 'center' as const,
+    flex: 1,
+  },
+  placeholder: {
+    width: 40,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold' as const,
     color: '#FFFFFF',
     marginTop: 10,
+    textAlign: 'center' as const,
   },
   form: {
     backgroundColor: rose_theme.rose_light,
