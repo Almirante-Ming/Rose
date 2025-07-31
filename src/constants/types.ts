@@ -57,3 +57,26 @@ export interface PersonResponse {
     dt_create: string;
     dt_update: string;
 }
+
+export interface ScheduleData {
+    dt_init: string;
+    tm_init: string;
+    trainer_id: number;
+    customer_id: number;
+    machine_id: number;
+    message: string;
+    c_status: 'marked';
+}
+
+export interface ScheduleResponse extends ScheduleData {
+    id: number;
+    dt_create: string;
+    dt_update: string;
+}
+
+export interface MachineResponse {
+    id: number;
+    name: string;
+    description?: string;
+    state: string;
+}

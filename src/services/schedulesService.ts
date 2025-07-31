@@ -1,8 +1,8 @@
 import { apiService } from './apiService';
 import { authService } from './authService';
-import { NotesData, Note } from '@constants/types';
+import { NotesData, Note, ScheduleData, ScheduleResponse } from '@constants/types';
 
-export interface ScheduleResponse extends Array<Note> {}
+export interface ScheduleListResponse extends Array<Note> {}
 
 export const schedulesService = {
     async getUserSchedules(): Promise<NotesData> {
@@ -12,7 +12,7 @@ export const schedulesService = {
             if (userId === null || userId === undefined) {
                 throw new Error('User not authenticated or user ID not found');
             }
-            const schedules: ScheduleResponse = await apiService.get(`/schedule/${userId}`);
+            const schedules: ScheduleListResponse = await apiService.get(`/schedule/${userId}`);
             
             const groupedSchedules: NotesData = {};
             schedules.forEach(schedule => {
@@ -38,7 +38,7 @@ export const schedulesService = {
                 throw new Error('User not authenticated or user ID not found');
             }
 
-            const schedules: ScheduleResponse = await apiService.get(
+            const schedules: ScheduleListResponse = await apiService.get(
                 `/schedules/${userId}?startDate=${startDate}&endDate=${endDate}`
             );
             
@@ -59,16 +59,10 @@ export const schedulesService = {
         }
     },
 
-    async createSchedule(schedule: Note): Promise<Note> {
+    async createSchedule(scheduleData: ScheduleData): Promise<ScheduleResponse> {
         try {
-            const userId = await authService.getUserId();
-            
-            if (userId === null || userId === undefined) {
-                throw new Error('User not authenticated or user ID not found');
-            }
-
-            const newSchedule = await apiService.post<Note>(`/schedules/${userId}`, schedule);
-            return newSchedule;
+            const response = await apiService.post<ScheduleResponse>('/schedules/', scheduleData);
+            return response;
         } catch (error) {
             console.error('Error creating schedule:', error);
             throw error;

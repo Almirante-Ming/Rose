@@ -40,6 +40,15 @@ export default function TabLayout() {
           }}
         />
       )}
+      <Tabs.Screen
+        name="new_schedule"
+        options={{
+          title: 'Novo Agendamento',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={color} size={24} />
+          ), headerShown: false
+        }}
+      />
     </Tabs>
   );
 }
