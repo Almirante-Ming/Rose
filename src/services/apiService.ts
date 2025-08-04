@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { tinto } from '@constants/api_keys';
+import { configService } from './configService';
 import { authService } from './authService';
 
 class ApiService {
@@ -7,7 +7,7 @@ class ApiService {
 
     constructor() {
         this.api = axios.create({
-            baseURL: tinto,
+            baseURL: configService.getTintoUrl(),
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json',
@@ -107,6 +107,11 @@ class ApiService {
             console.error(`DELETE ${endpoint} failed:`, error);
             throw error;
         }
+    }
+
+    // Update base URL when config changes
+    updateBaseUrl(newUrl: string): void {
+        this.api.defaults.baseURL = newUrl;
     }
 }
 

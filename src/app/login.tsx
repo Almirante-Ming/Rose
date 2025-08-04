@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar, Modal } from 'react-native';
 import { loginStyles } from '@/styles';
 import { useAuth } from '@/contexts';
-import { authUtils } from '@/services';
+import { authUtils, configService } from '@/services';
 import { rose_theme } from '@constants/rose_theme';
 
 export default function LoginScreen() {
@@ -16,8 +16,16 @@ export default function LoginScreen() {
     const [showPassword, setShowPassword] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
     const [statusType, setStatusType] = useState<'success' | 'error' | ''>('');
+    const [showConfigModal, setShowConfigModal] = useState(false);
+    const [tempTintoUrl, setTempTintoUrl] = useState('');
+    const [configInputFocused, setConfigInputFocused] = useState(false);
 
     const { login } = useAuth();
+
+    useEffect(() => {
+        // Initialize config when component mounts
+        configService.loadConfig();
+    }, []);
 
     const handleLogin = async () => {
         if (!emailOrPhone.trim() || !password.trim()) {
@@ -66,6 +74,64 @@ export default function LoginScreen() {
 
     const isValidInput = () => {
         return emailOrPhone.trim().length > 0 && password.trim().length > 0;
+    };
+
+    const openConfigModal = () => {
+        // Load current tinto URL from config service
+        setTempTintoUrl(configService.getTintoUrl());
+        setShowConfigModal(true);
+    };
+
+    const closeConfigModal = () => {
+        setShowConfigModal(false);
+        setTempTintoUrl('');
+    };
+
+    const saveConfig = async () => {
+        if (!tempTintoUrl.trim()) {
+            Alert.alert('Erro', 'Por favor, insira uma URL válida');
+            return;
+        }
+
+        // Basic URL validation
+        const urlPattern = /^https?:\/\/.+/;
+        if (!urlPattern.test(tempTintoUrl.trim())) {
+            Alert.alert('Erro', 'Por favor, insira uma URL válida (deve começar com http:// ou https://)');
+            return;
+        }
+
+        try {
+            await configService.setTintoUrl(tempTintoUrl.trim());
+            Alert.alert(
+                'Configuração Salva',
+                'A URL do servidor foi atualizada com sucesso!',
+                [{ text: 'OK', onPress: closeConfigModal }]
+            );
+        } catch (error) {
+            Alert.alert('Erro', 'Falha ao salvar a configuração');
+        }
+    };
+
+    const resetConfig = async () => {
+        Alert.alert(
+            'Restaurar Configuração Padrão',
+            'Deseja restaurar a URL padrão do servidor?',
+            [
+                { text: 'Cancelar', style: 'cancel' },
+                {
+                    text: 'Sim',
+                    onPress: async () => {
+                        try {
+                            await configService.clearConfig();
+                            setTempTintoUrl(configService.getTintoUrl());
+                            Alert.alert('Sucesso', 'Configuração padrão restaurada!');
+                        } catch (error) {
+                            Alert.alert('Erro', 'Falha ao restaurar a configuração');
+                        }
+                    }
+                }
+            ]
+        );
     };
 
     return (
@@ -195,6 +261,72 @@ export default function LoginScreen() {
                     </View>
                 </View>
             )}
+
+            <TouchableOpacity
+                style={loginStyles.configButton}
+                onPress={openConfigModal}
+                activeOpacity={0.8}
+            >
+                <Text style={loginStyles.configButtonText}>⚙</Text>
+            </TouchableOpacity>
+
+            <Modal
+                visible={showConfigModal}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={closeConfigModal}
+            >
+                <View style={loginStyles.modalOverlay}>
+                    <View style={loginStyles.modalContainer}>
+                        <Text style={loginStyles.modalTitle}>Configurar Servidor</Text>
+                        
+                        <View style={loginStyles.inputContainer}>
+                            <Text style={loginStyles.label}>URL do Servidor Tinto</Text>
+                            <TextInput
+                                style={[
+                                    loginStyles.input,
+                                    configInputFocused && loginStyles.inputFocused
+                                ]}
+                                value={tempTintoUrl}
+                                onChangeText={setTempTintoUrl}
+                                onFocus={() => setConfigInputFocused(true)}
+                                onBlur={() => setConfigInputFocused(false)}
+                                placeholder="https://exemplo.ngrok-free.app"
+                                placeholderTextColor="#b3b3b3"
+                                keyboardType="url"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                            />
+                        </View>
+
+                        <View style={loginStyles.modalButtonContainer}>
+                            <TouchableOpacity
+                                style={[loginStyles.modalButton, loginStyles.modalButtonCancel]}
+                                onPress={closeConfigModal}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={loginStyles.modalButtonText}>Cancelar</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity
+                                style={[loginStyles.modalButton, { backgroundColor: '#ff6b35' }]}
+                                onPress={resetConfig}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={loginStyles.modalButtonText}>Restaurar</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity
+                                style={[loginStyles.modalButton, loginStyles.modalButtonSave]}
+                                onPress={saveConfig}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={loginStyles.modalButtonText}>Salvar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </KeyboardAvoidingView>
         </>
     );

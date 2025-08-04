@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { authUtils } from '@/services';
+import { authUtils, configService } from '@/services';
 import { AuthUser, UserRole } from '@constants/types';
 
 interface AuthContextType {
@@ -32,6 +32,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const checkAuth = async () => {
         try {
             setIsLoading(true);
+            
+            // Load config first
+            await configService.loadConfig();
             
             const autoLoginSuccess = await authUtils.autoLogin();
             

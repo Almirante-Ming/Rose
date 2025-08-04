@@ -1,1 +1,1 @@
-export const tinto = 'https://a1105820efa2.ngrok-free.app'
+export var tinto = 'https://tinto.com.br/'
