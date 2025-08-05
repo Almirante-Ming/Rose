@@ -127,7 +127,11 @@ export default function PersonAdd() {
     }
     
     if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split('T')[0];
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      
       setFormData(prev => ({ ...prev, dt_birth: formattedDate }));
       
       if (errors.dt_birth) {
@@ -181,13 +185,15 @@ export default function PersonAdd() {
 
   const formatDateForDisplay = (dateString: string): string => {
     if (!dateString) return '';
-    const date = new Date(dateString + 'T00:00:00');
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     return date.toLocaleDateString('pt-BR');
   };
 
   const parsedDate = (() => {
     if (formData.dt_birth) {
-      const date = new Date(formData.dt_birth + 'T00:00:00');
+      const [year, month, day] = formData.dt_birth.split('-');
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       return isNaN(date.getTime()) ? new Date() : date;
     }
     return new Date();

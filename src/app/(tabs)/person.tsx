@@ -52,7 +52,9 @@ export default function Person() {
 
   const formatDate = (dateString: string): string => {
     if (!dateString) return '';
-    const date = new Date(dateString);
+    // Fix: Parse date as local date to avoid timezone shifts
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     return date.toLocaleDateString('pt-BR');
   };
 
