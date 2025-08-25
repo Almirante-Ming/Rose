@@ -6,4 +6,4 @@ export { machinesService } from './machinesService';
 export { authUtils } from './authUtils';
 export { configService } from './configService';
 export type { LoginCredentials, LoginResponse, ApiStatusResponse } from './authUtils';
-export type { PersonData, PersonResponse, ScheduleData, ScheduleResponse, MachineResponse } from '@constants/types';
+export type { PersonData, PersonResponse, ScheduleData, ScheduleResponse, MachineData, MachineResponse } from '@constants/types';

@@ -74,6 +74,11 @@ export interface ScheduleResponse extends ScheduleData {
     dt_update: string;
 }
 
+export interface MachineData {
+    name: string;
+    m_state: 'active' | 'maintenance' | 'inactive' ;
+}
+
 export interface MachineResponse {
     id: number;
     name: string;

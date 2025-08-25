@@ -1,10 +1,10 @@
 import { apiService } from './apiService';
-import { MachineResponse } from '@constants/types';
+import { MachineResponse, MachineData } from '@constants/types';
 
 class MachinesService {
   async getMachines(): Promise<MachineResponse[]> {
     try {
-      const response = await apiService.get<MachineResponse[]>('/machines');
+      const response = await apiService.get<MachineResponse[]>('/machines/');
       return response;
     } catch (error) {
       console.error('Error fetching machines:', error);
@@ -18,6 +18,16 @@ class MachinesService {
       return response;
     } catch (error) {
       console.error('Error fetching machine:', error);
+      throw error;
+    }
+  }
+
+  async createMachine(machineData: MachineData): Promise<MachineResponse> {
+    try {
+      const response = await apiService.post<MachineResponse>('/machines/', machineData);
+      return response;
+    } catch (error) {
+      console.error('Error creating machine:', error);
       throw error;
     }
   }

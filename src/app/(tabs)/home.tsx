@@ -1,6 +1,7 @@
 import { View, Text, FlatList, Modal, TouchableOpacity, Animated, Alert, Platform, NativeModules } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { Ionicons } from '@expo/vector-icons';
 import { rose_home, rose_callendar } from '@/styles';
 import { Note,NotesData,CalendarDay } from '@constants/types';
 import { schedulesService } from '@/services';
@@ -58,6 +59,7 @@ export default function Home() {
     const [backgroundOpacity] = useState(new Animated.Value(0));
     const [notes, setNotes] = useState<NotesData>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isScrolledToEnd, setIsScrolledToEnd] = useState<boolean>(false);
 
     const { isAuthenticated, user, logout } = useAuth();
 
@@ -72,6 +74,7 @@ export default function Home() {
 
             const schedulesData = await schedulesService.getUserSchedules();
             setNotes(schedulesData);
+            setIsScrolledToEnd(false); // Reset scroll state when data is refreshed
         } catch (error) {
             console.error('Error fetching schedules:', error);
             Alert.alert('Erro', 'Não foi possível carregar os agendamentos. Tente novamente.');
@@ -92,6 +95,7 @@ export default function Home() {
 
     const handleDayPress = (day: CalendarDay) => {
         setSelectedDate(day.dateString);
+        setIsScrolledToEnd(false); // Reset scroll state when date changes
     };
 
     const getNextFiveNotes = (): Note[] => {
@@ -163,6 +167,12 @@ export default function Home() {
         );
     };
 
+    const handleScroll = (event: any) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isCloseToEnd = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+        setIsScrolledToEnd(isCloseToEnd);
+    };
+
     return (
         <View style={rose_home.container}>
             <View style={rose_home.header}>
@@ -202,33 +212,43 @@ export default function Home() {
                 {isLoading ? (
                     <Text style={rose_home.loadingText}>Carregando...</Text>
                 ) : (
-                    <FlatList
-                        data={selectedDate ? notes[selectedDate] || [] : getNextFiveNotes()}
-                        keyExtractor={(item, index) => selectedDate ? index.toString() : `${item.date}-${index}`}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity 
-                                style={rose_home.noteCard}
-                                onPress={() => handleNotePress(item)}
-                            >
-                                <View style={rose_home.noteCardLeft}>
-                                    <Text style={rose_home.noteCardTime}>{item.tm_init}</Text>
-                                    <Text style={rose_home.noteCardSubject}>{item.machine_name}</Text>
-                                    {!selectedDate && (
-                                        <Text style={rose_home.noteCardDate}>{formatDate((item as any).date || item.dt_init)}</Text>
-                                    )}
-                                </View>
-                                <View style={rose_home.noteCardRight}>
-                                    <Text style={rose_home.noteCardLocation}>{item.customer_name}</Text>
-                                </View>
-                            </TouchableOpacity>
+                    <View style={rose_home.notesListContainer}>
+                        <FlatList
+                            data={selectedDate ? notes[selectedDate] || [] : getNextFiveNotes()}
+                            keyExtractor={(item, index) => selectedDate ? index.toString() : `${item.date}-${index}`}
+                            showsVerticalScrollIndicator={false}
+                            style={rose_home.notesList}
+                            onScroll={handleScroll}
+                            scrollEventThrottle={16}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity 
+                                    style={rose_home.noteCard}
+                                    onPress={() => handleNotePress(item)}
+                                >
+                                    <View style={rose_home.noteCardLeft}>
+                                        <Text style={rose_home.noteCardTime}>{item.tm_init}</Text>
+                                        <Text style={rose_home.noteCardSubject}>{item.machine_name}</Text>
+                                        {!selectedDate && (
+                                            <Text style={rose_home.noteCardDate}>{formatDate((item as any).date || item.dt_init)}</Text>
+                                        )}
+                                    </View>
+                                    <View style={rose_home.noteCardRight}>
+                                        <Text style={rose_home.noteCardLocation}>{item.customer_name}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+                            ListEmptyComponent={
+                                selectedDate ? 
+                                    <Text style={rose_home.emptyText}>Nenhuma aula registrada</Text> :
+                                    <Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text>
+                            }
+                        />
+                        {((selectedDate ? notes[selectedDate] || [] : getNextFiveNotes()).length > 2 && !isScrolledToEnd) && (
+                            <View style={rose_home.downArrowContainer}>
+                                <Ionicons name="chevron-down" size={24} color="#FFFFFF" />
+                            </View>
                         )}
-                        ListEmptyComponent={
-                            selectedDate ? 
-                                <Text style={rose_home.emptyText}>Nenhuma aula registrada</Text> :
-                                <Text style={rose_home.emptyText}>Nenhuma aula encontrada</Text>
-                        }
-                    />
+                    </View>
                 )}
             </View>
             

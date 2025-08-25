@@ -13,8 +13,9 @@
       "bundleIdentifier": "com.anonymous.rose"
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/ruby_rose.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.rose"

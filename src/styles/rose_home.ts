@@ -130,6 +130,21 @@ notesSection: {
     borderRadius: 15,
     padding: 15,
 },
+notesListContainer: {
+    position: 'relative',
+},
+notesList: {
+    maxHeight: 195, // Height for exactly 2 cards (card height ~75px + margin 10px each = ~170px + some padding)
+},
+downArrowContainer: {
+    position: 'absolute',
+    bottom: 5,
+    right: 15,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+},
 notesSectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',

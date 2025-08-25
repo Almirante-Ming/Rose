@@ -2,53 +2,62 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAuth } from '@/contexts';
 
-
 export default function TabLayout() {
   const { isAdmin } = useAuth();
 
+  const screens = [
+    {
+      name: 'home',
+      title: 'Home',
+      icon: (color: string, focused: boolean) =>
+        <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />,
+    },
+    {
+      name: 'new_schedule',
+      title: 'Novo Agendamento',
+      icon: (color: string, focused: boolean) =>
+        <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={color} size={24} />,
+    },
+  ];
+
+  if (isAdmin()) {
+    screens.push(
+      {
+        name: 'person',
+        title: 'Lista de Pessoas',
+        icon: (color: string, focused: boolean) =>
+          <Ionicons name={focused ? 'people' : 'people-outline'} color={color} size={24} />,
+      },
+      {
+        name: 'machine_add',
+        title: 'Registrar Atividade',
+        icon: (color: string, focused: boolean) =>
+          <Ionicons name={focused ? 'construct' : 'construct-outline'} color={color} size={24} />,
+      }
+    );
+  }
+
   return (
     <Tabs
-    screenOptions={{
+      screenOptions={{
         tabBarActiveTintColor: '#ffd33d',
-        headerStyle: {
-            backgroundColor: '#25292e',
-        },
+        headerStyle: { backgroundColor: '#25292e' },
         headerShadowVisible: false,
         headerTintColor: '#fff',
-        tabBarStyle: {
-            backgroundColor: '#25292e',
-        },
+        tabBarStyle: { backgroundColor: '#25292e' },
       }}
     >
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
-          ), headerShown: false
-        }}
-      />
-      {isAdmin() && (
+      {screens.map(({ name, title, icon }) => (
         <Tabs.Screen
-          name="person"
+          key={name}
+          name={name}
           options={{
-            title: 'Lista de Pessoas',
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'people' : 'people-outline'} color={color} size={24} />
-            ), headerShown: false
+            title,
+            tabBarIcon: ({ color, focused }) => icon(color, focused),
+            headerShown: false,
           }}
         />
-      )}
-      <Tabs.Screen
-        name="new_schedule"
-        options={{
-          title: 'Novo Agendamento',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={color} size={24} />
-          ), headerShown: false
-        }}
-      />
+      ))}
     </Tabs>
   );
 }
