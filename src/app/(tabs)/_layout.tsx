@@ -29,10 +29,10 @@ export default function TabLayout() {
           <Ionicons name={focused ? 'people' : 'people-outline'} color={color} size={24} />,
       },
       {
-        name: 'machine_add',
-        title: 'Registrar Atividade',
+        name: 'machine_list',
+        title: 'Lista de Atividades',
         icon: (color: string, focused: boolean) =>
-          <Ionicons name={focused ? 'construct' : 'construct-outline'} color={color} size={24} />,
+          <Ionicons name={focused ? 'list' : 'list-outline'} color={color} size={24} />,
       }
     );
   }
