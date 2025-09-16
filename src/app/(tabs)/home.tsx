@@ -158,6 +158,7 @@ export default function Home() {
                 selectedNote={selectedNote}
                 backgroundOpacity={backgroundOpacity}
                 onClose={closeModal}
+                onScheduleUpdate={fetchSchedules}
             />
         </View>
     );

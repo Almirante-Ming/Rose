@@ -98,5 +98,18 @@ export const schedulesService = {
             console.error('Error deleting schedule:', error);
             throw error;
         }
+    },
+
+    async cancelSchedule(scheduleId: number, data: Partial<ScheduleData>): Promise<Note> {
+        try {
+            const response = await apiService.put<Note>(`/schedules/${scheduleId}`, {
+                ...data,
+                c_status: 'cancelled'
+            });
+            return response;
+        } catch (error) {
+            console.error('Error canceling schedule:', error);
+            throw error;
+        }
     }
 };

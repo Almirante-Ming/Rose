@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
@@ -48,6 +48,7 @@ interface CadFormProps {
 }
 
 export default function CadForm({ config, isAdmin }: CadFormProps) {
+  const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [formData, setFormData] = useState<Record<string, any>>(() => {
@@ -68,13 +69,29 @@ export default function CadForm({ config, isAdmin }: CadFormProps) {
     return (
       <>
         <Stack.Screen options={{ headerShown: false }} />
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
           <View style={styles.errorContainer}>
             <Ionicons name="warning" size={48} color={rose_theme.rose_main} />
             <Text style={styles.errorText}>Acesso negado</Text>
             <Text style={styles.errorSubText}>Apenas administradores podem acessar esta página</Text>
           </View>
-        </SafeAreaView>
+        </View>
+      </>
+    );
+  }
+
+  // Check admin access if required
+  if (config.requiresAdmin && isAdmin && !isAdmin()) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={[styles.container, { paddingTop: insets.top }]}>
+          <View style={styles.errorContainer}>
+            <Ionicons name="warning" size={48} color={rose_theme.rose_main} />
+            <Text style={styles.errorText}>Acesso negado</Text>
+            <Text style={styles.errorSubText}>Apenas administradores podem acessar esta página</Text>
+          </View>
+        </View>
       </>
     );
   }
@@ -304,7 +321,7 @@ export default function CadForm({ config, isAdmin }: CadFormProps) {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <KeyboardAvoidingView 
-        style={styles.container} 
+        style={[styles.container, { paddingTop: insets.top }]} 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>

@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
   Modal,
   FlatList,
-  SafeAreaView,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { personsService, machinesService, schedulesService } from '@/services';
 import { ScheduleData, PersonResponse, MachineResponse } from '@constants/types';
@@ -95,6 +95,8 @@ const FilterableSelect: React.FC<FilterableSelectProps> = ({
 };
 
 export default function NewSchedule() {
+  const insets = useSafeAreaInsets();
+  
   const [formData, setFormData] = useState<ScheduleData>({
     dt_init: '',
     tm_init: '',
@@ -238,12 +240,12 @@ export default function NewSchedule() {
 
   if (isLoading && trainers.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={rose_theme.rose_main} />
           <Text style={styles.loadingText}>Carregando dados...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -252,7 +254,7 @@ export default function NewSchedule() {
   const selectedMachine = machines.find(m => m.id === formData.machine_id) || null;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Ionicons name="calendar" size={32} color={rose_theme.rose_main} />
@@ -374,7 +376,7 @@ export default function NewSchedule() {
           onChange={handleTimeChange}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
