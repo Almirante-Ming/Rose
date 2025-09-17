@@ -187,6 +187,12 @@ noteCardSubject: {
     color: '#810e13',
     marginTop: 5,
 },
+noteCardTrainer: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 3,
+    fontStyle: 'italic',
+},
 noteCardDate: {
     fontSize: 12,
     color: '#666',

@@ -100,15 +100,46 @@ export const schedulesService = {
         }
     },
 
-    async cancelSchedule(scheduleId: number, data: Partial<ScheduleData>): Promise<Note> {
+    async cancelSchedule(schedule: Note): Promise<void> {
         try {
-            const response = await apiService.put<Note>(`/schedules/${scheduleId}`, {
-                ...data,
+            const requestData = {
+                schedule_id: schedule.schedule_id,
+                dt_init: schedule.dt_init,
+                tm_init: schedule.tm_init,
+                trainer_name: schedule.trainer_name,
+                customer_name: schedule.customer_name,
+                machine_name: schedule.machine_name,
+                message: schedule.message || '',
                 c_status: 'cancelled'
-            });
+            };
+            
+            await apiService.put(`/schedules/${schedule.schedule_id}`, requestData);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async rescheduleSchedule(schedule: Note, newDateTime: string): Promise<Note> {
+        try {
+            // Parse the new datetime to extract date and time parts
+            const newDate = new Date(newDateTime);
+            const dt_init = newDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            const tm_init = newDate.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
+            
+            const requestData = {
+                schedule_id: schedule.schedule_id,
+                dt_init: dt_init,
+                tm_init: tm_init,
+                trainer_name: schedule.trainer_name,
+                customer_name: schedule.customer_name,
+                machine_name: schedule.machine_name,
+                message: schedule.message || '',
+                c_status: 'reserved'
+            };
+            
+            const response = await apiService.put<Note>(`/schedules/${schedule.schedule_id}`, requestData);
             return response;
         } catch (error) {
-            console.error('Error canceling schedule:', error);
             throw error;
         }
     }

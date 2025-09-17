@@ -1,5 +1,5 @@
 export interface Note {
-    id?: number;
+    schedule_id: number;
     date: any;
     dt_init: string;
     tm_init: string;
@@ -10,7 +10,7 @@ export interface Note {
     customer_name: string;
     machine_name: string;
     message: string;
-    c_status?: 'marked' | 'cancelled' | 'completed';
+    c_status?: 'marked' | 'reserved' | 'cancelled' | 'completed';
 }
 
 export interface NotesData {
@@ -70,7 +70,7 @@ export interface ScheduleData {
     customer_id: number;
     machine_id: number;
     message: string;
-    c_status: 'marked' | 'cancelled' | 'completed';
+    c_status: 'marked' | 'reserved' | 'cancelled' | 'completed';
 }
 
 export interface ScheduleResponse extends ScheduleData {

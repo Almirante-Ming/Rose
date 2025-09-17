@@ -67,6 +67,7 @@ export default function ScheduleList({
                                 </View>
                                 <View style={rose_home.noteCardRight}>
                                     <Text style={rose_home.noteCardLocation}>{item.customer_name}</Text>
+                                    <Text style={rose_home.noteCardTrainer}>Instrutor: {item.trainer_name}</Text>
                                 </View>
                             </TouchableOpacity>
                         )}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Modal as RNModal, View, Text, TouchableOpacity, Animated, TextInput, Alert, ScrollView } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import { Note } from '@constants/types';
 import { rose_home } from '@/styles';
@@ -24,6 +25,13 @@ export default function ScheduleModal({
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [cancelReason, setCancelReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    
+    // Reschedule states
+    const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedTime, setSelectedTime] = useState(new Date());
 
     const handleCancelPress = () => {
         setShowCancelModal(true);
@@ -31,24 +39,20 @@ export default function ScheduleModal({
     };
 
     const handleCancelConfirm = async () => {
-        if (!selectedNote || !selectedNote.id) {
+        if (!selectedNote || !selectedNote.schedule_id) {
             Alert.alert('Erro', 'Informações da aula não encontradas');
             return;
         }
 
         setIsLoading(true);
         try {
-            const updateData = {
-                dt_init: selectedNote.dt_init,
-                tm_init: selectedNote.tm_init,
-                trainer_id: selectedNote.trainer_id || 0,
-                customer_id: selectedNote.customer_id || 0,
-                machine_id: selectedNote.machine_id || 0,
-                message: cancelReason.trim() || selectedNote.message,
-                c_status: 'cancelled' as const
+            // Create updated schedule with cancel reason in message
+            const updatedSchedule = {
+                ...selectedNote,
+                message: cancelReason.trim() || selectedNote.message
             };
 
-            await schedulesService.cancelSchedule(selectedNote.id, updateData);
+            await schedulesService.cancelSchedule(updatedSchedule);
             
             Alert.alert(
                 'Sucesso',
@@ -80,7 +84,63 @@ export default function ScheduleModal({
     };
 
     const handleReschedulePress = () => {
-        Alert.alert('Em Desenvolvimento', 'Funcionalidade de reagendar em desenvolvimento');
+        setShowRescheduleModal(true);
+        // Initialize with current schedule date/time
+        if (selectedNote) {
+            const currentDateTime = new Date(`${selectedNote.dt_init}T${selectedNote.tm_init}`);
+            setSelectedDate(currentDateTime);
+            setSelectedTime(currentDateTime);
+        }
+    };
+
+    const handleRescheduleConfirm = async () => {
+        if (!selectedNote || !selectedNote.schedule_id) {
+            Alert.alert('Erro', 'Informações da aula não encontradas');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            // Combine date and time
+            const year = selectedDate.getFullYear();
+            const month = selectedDate.getMonth();
+            const day = selectedDate.getDate();
+            const hours = selectedTime.getHours();
+            const minutes = selectedTime.getMinutes();
+            
+            const newDateTime = new Date(year, month, day, hours, minutes);
+            const newDateTimeString = newDateTime.toISOString();
+
+            await schedulesService.rescheduleSchedule(selectedNote, newDateTimeString);
+            
+            Alert.alert(
+                'Sucesso',
+                'Aula remarcada com sucesso!',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            setShowRescheduleModal(false);
+                            onClose();
+                            onScheduleUpdate?.();
+                        }
+                    }
+                ]
+            );
+        } catch (error: any) {
+            Alert.alert(
+                'Erro',
+                error.response?.data?.message || 'Erro ao remarcar aula. Tente novamente.'
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleRescheduleModalClose = () => {
+        setShowRescheduleModal(false);
+        setShowDatePicker(false);
+        setShowTimePicker(false);
     };
 
     const isMarked = selectedNote?.c_status === 'marked' || !selectedNote?.c_status;
@@ -220,6 +280,93 @@ export default function ScheduleModal({
                     </View>
                 </View>
             </RNModal>
+
+            {/* Reschedule Modal */}
+            <RNModal
+                visible={showRescheduleModal}
+                transparent
+                animationType="slide"
+                onRequestClose={handleRescheduleModalClose}
+            >
+                <View style={styles.cancelModalBackground}>
+                    <View style={styles.cancelModalContainer}>
+                        <Text style={styles.cancelModalTitle}>Remarcar Aula</Text>
+                        <Text style={styles.cancelModalSubtitle}>
+                            Selecione a nova data e horário para a aula
+                        </Text>
+
+                        <View style={styles.dateTimeContainer}>
+                            <TouchableOpacity 
+                                style={styles.dateTimeButton}
+                                onPress={() => setShowDatePicker(true)}
+                            >
+                                <Ionicons name="calendar" size={20} color={rose_theme.rose_main} />
+                                <Text style={styles.dateTimeButtonText}>
+                                    {selectedDate.toLocaleDateString('pt-BR')}
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity 
+                                style={styles.dateTimeButton}
+                                onPress={() => setShowTimePicker(true)}
+                            >
+                                <Ionicons name="time" size={20} color={rose_theme.rose_main} />
+                                <Text style={styles.dateTimeButtonText}>
+                                    {selectedTime.toLocaleTimeString('pt-BR', { 
+                                        hour: '2-digit', 
+                                        minute: '2-digit' 
+                                    })}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={selectedDate}
+                                mode="date"
+                                display="default"
+                                onChange={(event, date) => {
+                                    setShowDatePicker(false);
+                                    if (date) setSelectedDate(date);
+                                }}
+                                minimumDate={new Date()}
+                            />
+                        )}
+
+                        {showTimePicker && (
+                            <DateTimePicker
+                                value={selectedTime}
+                                mode="time"
+                                display="default"
+                                onChange={(event, time) => {
+                                    setShowTimePicker(false);
+                                    if (time) setSelectedTime(time);
+                                }}
+                            />
+                        )}
+
+                        <View style={styles.cancelModalButtons}>
+                            <TouchableOpacity 
+                                style={[styles.cancelModalButton, styles.cancelModalCancelButton]}
+                                onPress={handleRescheduleModalClose}
+                            >
+                                <Text style={styles.cancelModalCancelText}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={[styles.cancelModalButton, styles.cancelModalConfirmButton]}
+                                onPress={handleRescheduleConfirm}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <Text style={styles.cancelModalConfirmText}>Remarcando...</Text>
+                                ) : (
+                                    <Text style={styles.cancelModalConfirmText}>Confirmar</Text>
+                                )}
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </RNModal>
         </>
     );
 }
@@ -340,5 +487,29 @@ const styles = {
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: '600' as const,
+    },
+    dateTimeContainer: {
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        gap: 15,
+        marginBottom: 20,
+    },
+    dateTimeButton: {
+        flex: 1,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: rose_theme.rose_main,
+        backgroundColor: '#f9f9f9',
+        gap: 8,
+    },
+    dateTimeButtonText: {
+        color: '#333',
+        fontSize: 16,
+        fontWeight: '500' as const,
     },
 };
