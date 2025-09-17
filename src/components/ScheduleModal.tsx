@@ -6,6 +6,7 @@ import { Note } from '@constants/types';
 import { rose_home } from '@/styles';
 import { rose_theme } from '@constants/rose_theme';
 import { schedulesService, apiService } from '@/services';
+import { useAuth } from '@/contexts';
 
 interface ScheduleModalProps {
     visible: boolean;
@@ -22,6 +23,7 @@ export default function ScheduleModal({
     onClose,
     onScheduleUpdate
 }: ScheduleModalProps) {
+    const { user } = useAuth();
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [cancelReason, setCancelReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -151,7 +153,7 @@ export default function ScheduleModal({
 
         setIsLoading(true);
         try {
-            // Update status from 'reserved' to 'marked'
+            // Create updated schedule with 'marked' status
             const updatedSchedule = {
                 ...selectedNote,
                 c_status: 'marked' as const
@@ -194,6 +196,7 @@ export default function ScheduleModal({
     };
 
     const isMarked = selectedNote?.c_status === 'marked' || !selectedNote?.c_status;
+    const canConfirm = user?.role?.level === 1 || user?.role?.level === 2;
 
     return (
         <>
@@ -272,16 +275,21 @@ export default function ScheduleModal({
                                         </TouchableOpacity>
 
                                         {selectedNote?.c_status === 'reserved' ? (
-                                            <TouchableOpacity 
-                                                style={[styles.actionButton, styles.confirmButton]}
-                                                onPress={handleConfirmReserved}
-                                                disabled={isLoading}
-                                            >
-                                                <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
-                                                <Text style={styles.confirmButtonText}>
-                                                    {isLoading ? 'Confirmando...' : 'Confirmar'}
-                                                </Text>
-                                            </TouchableOpacity>
+                                            canConfirm ? (
+                                                <TouchableOpacity 
+                                                    style={[styles.actionButton, styles.confirmButton]}
+                                                    onPress={handleConfirmReserved}
+                                                    disabled={isLoading}
+                                                >
+                                                    <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+                                                    <Text style={styles.confirmButtonText}>
+                                                        {isLoading ? 'Confirmando...' : 'Confirmar'}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ) : (
+                                                // Empty space to maintain layout for users without permission
+                                                <View style={[styles.actionButton, { opacity: 0 }]} />
+                                            )
                                         ) : (
                                             <TouchableOpacity 
                                                 style={[styles.actionButton, styles.rescheduleButton]}
