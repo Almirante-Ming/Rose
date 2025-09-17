@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, Animated, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { rose_home } from '@/styles';
 import { Note, NotesData, CalendarDay } from '@constants/types';
 import { schedulesService } from '@/services';
@@ -38,13 +39,27 @@ export default function Home() {
         }
     };
 
-    useEffect(() => {
-        fetchSchedules();
-    }, []);
+    const refreshHomePage = async () => {
+        setSelectedDate('');
+        setModalVisible(false);
+        setSelectedNote(null);
+        setNotes({});
+        setIsScrolledToEnd(false);
+        
+        backgroundOpacity.setValue(0);
+        
+        await fetchSchedules();
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            refreshHomePage();
+        }, [])
+    );
 
     const handleDayPress = (day: CalendarDay) => {
         setSelectedDate(day.dateString);
-        setIsScrolledToEnd(false); // Reset scroll state when date changes
+        setIsScrolledToEnd(false);
     };
 
     const getNextFiveNotes = (): Note[] => {
@@ -158,6 +173,7 @@ export default function Home() {
                 selectedNote={selectedNote}
                 backgroundOpacity={backgroundOpacity}
                 onClose={closeModal}
+                onScheduleUpdate={fetchSchedules}
             />
         </View>
     );
