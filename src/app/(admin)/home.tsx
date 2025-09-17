@@ -30,7 +30,7 @@ export default function Home() {
 
             const schedulesData = await schedulesService.getUserSchedules();
             setNotes(schedulesData);
-            setIsScrolledToEnd(false); // Reset scroll state when data is refreshed
+            setIsScrolledToEnd(false);
         } catch (error) {
             console.error('Error fetching schedules:', error);
             Alert.alert('Erro', 'Não foi possível carregar os agendamentos. Tente novamente.');

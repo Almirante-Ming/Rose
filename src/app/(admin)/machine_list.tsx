@@ -7,8 +7,9 @@ import {
   Alert,
   TouchableOpacity,
   RefreshControl,
-  Modal,
+  StyleSheet,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { machinesService } from '@/services';
@@ -19,6 +20,7 @@ export default function MachineList() {
   const [machines, setMachines] = useState<MachineResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const fetchMachines = async () => {
     try {
@@ -124,7 +126,7 @@ export default function MachineList() {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#FFFFFF" />
           <Text style={styles.loadingText}>Carregando atividades...</Text>
@@ -134,7 +136,7 @@ export default function MachineList() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Ionicons name="list" size={32} color="#FFFFFF" />
         <Text style={styles.title}>Lista de Atividades</Text>
@@ -197,7 +199,7 @@ export default function MachineList() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: rose_theme.rose_dark,
@@ -352,4 +354,4 @@ const styles = {
     color: '#CCCCCC',
     marginTop: 16,
   },
-};
+});
