@@ -143,49 +143,23 @@ export default function MachineList() {
     }
   };
 
-  const getStateIcon = (state: string): string => {
-    switch (state) {
-      case 'active':
-        return 'checkmark-circle';
-      case 'maintenance':
-        return 'construct';
-      case 'inactive':
-        return 'close-circle';
-      case 'deactive':
-        return 'ban';
-      default:
-        return 'help-circle';
-    }
-  };
-
   const renderMachineCard = ({ item }: { item: MachineResponse }) => (
     <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.cardHeaderLeft}>
+      <View style={styles.cardContent}>
+        <View style={styles.mainInfo}>
           <Text style={styles.machineName}>{item.name}</Text>
-          <View style={styles.badgeContainer}>
-            <View style={[styles.stateBadge, { backgroundColor: getStateColor(item.state) }]}>
-              <Ionicons 
-                name={getStateIcon(item.state) as any} 
-                size={12} 
-                color="#FFFFFF" 
-                style={styles.badgeIcon}
-              />
-              <Text style={styles.badgeText}>{getStateLabel(item.state)}</Text>
-            </View>
+          <Text style={styles.machineId}>#{item.id}</Text>
+        </View>
+        
+        <View style={styles.rightSection}>
+          <View style={[styles.stateBadge, { backgroundColor: getStateColor(item.state) }]}>
+            <Text style={styles.badgeText}>{getStateLabel(item.state)}</Text>
           </View>
         </View>
-        <Text style={styles.machineId}>#{item.id}</Text>
       </View>
-
+      
       {item.description && (
-        <View style={styles.cardContent}>
-          <View style={styles.infoRow}>
-            <Ionicons name="document-text" size={16} color={rose_theme.rose_main} />
-            <Text style={styles.infoLabel}>Descrição:</Text>
-            <Text style={styles.infoValue} numberOfLines={2}>{item.description}</Text>
-          </View>
-        </View>
+        <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
       )}
     </View>
   );
@@ -213,31 +187,6 @@ export default function MachineList() {
           <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
             <Ionicons name="refresh" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{filteredMachines.length}</Text>
-          <Text style={styles.statLabel}>Total</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {filteredMachines.filter(m => m.state === 'active').length}
-          </Text>
-          <Text style={styles.statLabel}>Disponível</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {filteredMachines.filter(m => m.state === 'maintenance').length}
-          </Text>
-          <Text style={styles.statLabel}>Em Análise</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {filteredMachines.filter(m => m.state === 'inactive' || m.state === 'deactive').length}
-          </Text>
-          <Text style={styles.statLabel}>Indisponível</Text>
         </View>
       </View>
 
@@ -397,63 +346,48 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 8,
   },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  statCard: {
-    backgroundColor: rose_theme.rose_light,
-    borderRadius: 10,
-    padding: 15,
-    alignItems: 'center',
-    minWidth: 70,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    marginTop: 4,
-  },
   listContainer: {
     padding: 20,
-    paddingTop: 0,
+    paddingTop: 10,
   },
   card: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 15,
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  cardHeader: {
+  cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 15,
+    alignItems: 'center',
   },
-  cardHeaderLeft: {
+  mainInfo: {
     flex: 1,
   },
   machineName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 2,
   },
   machineId: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
-    fontWeight: '600',
+    fontWeight: '500',
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+  },
+  description: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 8,
+    fontStyle: 'italic',
   },
   badgeContainer: {
     flexDirection: 'row',
@@ -465,34 +399,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    gap: 4,
-  },
-  badgeIcon: {
-    marginRight: 2,
   },
   badgeText: {
     fontSize: 10,
     fontWeight: 'bold',
     color: '#FFFFFF',
-  },
-  cardContent: {
-    gap: 12,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  infoLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    minWidth: 80,
-  },
-  infoValue: {
-    fontSize: 14,
-    color: '#666',
-    flex: 1,
   },
   loadingContainer: {
     flex: 1,

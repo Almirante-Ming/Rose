@@ -111,9 +111,11 @@ export default function LoginScreen() {
             return;
         }
 
-        const urlPattern = /^https?:\/\/.+/;
+        const urlPattern = /^https?:\/\/([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+(:[0-9]+)?(\/.*)?$|^https?:\/\/(\d{1,3}\.){3}\d{1,3}(:[0-9]+)?(\/.*)?$/;
         if (!urlPattern.test(tempTintoUrl.trim())) {
-            Alert.alert('Erro', 'Por favor, insira uma URL válida (deve começar com http:// ou https://)');
+            Alert.alert(
+                'Erro', 'Por favor, insira uma URL válida'
+            );
             return;
         }
 
@@ -306,6 +308,7 @@ export default function LoginScreen() {
                                 onChangeText={setTempTintoUrl}
                                 onFocus={() => setConfigInputFocused(true)}
                                 onBlur={() => setConfigInputFocused(false)}
+                                placeholder="Ex: http://192.168.1.100:3000"
                                 placeholderTextColor="#b3b3b3"
                                 keyboardType="url"
                                 autoCapitalize="none"
