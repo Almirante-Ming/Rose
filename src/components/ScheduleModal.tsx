@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Note } from '@constants/types';
 import { rose_home } from '@/styles';
 import { rose_theme } from '@constants/rose_theme';
-import { schedulesService } from '@/services';
+import { schedulesService, apiService } from '@/services';
 
 interface ScheduleModalProps {
     visible: boolean;
@@ -143,6 +143,56 @@ export default function ScheduleModal({
         setShowTimePicker(false);
     };
 
+    const handleConfirmReserved = async () => {
+        if (!selectedNote || !selectedNote.schedule_id) {
+            Alert.alert('Erro', 'Informações da aula não encontradas');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            // Update status from 'reserved' to 'marked'
+            const updatedSchedule = {
+                ...selectedNote,
+                c_status: 'marked' as const
+            };
+
+            const requestData = {
+                schedule_id: selectedNote.schedule_id,
+                dt_init: selectedNote.dt_init,
+                tm_init: selectedNote.tm_init,
+                trainer_name: selectedNote.trainer_name,
+                customer_name: selectedNote.customer_name,
+                machine_name: selectedNote.machine_name,
+                message: selectedNote.message || '',
+                c_status: 'marked'
+            };
+
+            await apiService.put(`/schedules/${selectedNote.schedule_id}`, requestData);
+            
+            Alert.alert(
+                'Sucesso',
+                'Aula confirmada com sucesso!',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            onClose();
+                            onScheduleUpdate?.();
+                        }
+                    }
+                ]
+            );
+        } catch (error: any) {
+            Alert.alert(
+                'Erro',
+                error.response?.data?.message || 'Erro ao confirmar aula. Tente novamente.'
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const isMarked = selectedNote?.c_status === 'marked' || !selectedNote?.c_status;
 
     return (
@@ -197,10 +247,12 @@ export default function ScheduleModal({
                                                 rose_home.modalValue,
                                                 { 
                                                     color: selectedNote.c_status === 'cancelled' ? '#e74c3c' : 
-                                                           selectedNote.c_status === 'completed' ? '#27ae60' : '#f39c12'
+                                                           selectedNote.c_status === 'completed' ? '#27ae60' :
+                                                           selectedNote.c_status === 'reserved' ? '#f39c12' : '#f39c12'
                                                 }
                                             ]}>
                                                 {selectedNote.c_status === 'marked' ? 'Agendada' :
+                                                 selectedNote.c_status === 'reserved' ? 'Aguardando reserva' :
                                                  selectedNote.c_status === 'cancelled' ? 'Cancelada' :
                                                  selectedNote.c_status === 'completed' ? 'Concluída' : selectedNote.c_status}
                                             </Text>
@@ -209,7 +261,7 @@ export default function ScheduleModal({
                                     </View>
                                 </ScrollView>
 
-                                {isMarked && (
+                                {(isMarked || selectedNote?.c_status === 'reserved') && (
                                     <View style={styles.actionButtons}>
                                         <TouchableOpacity 
                                             style={[styles.actionButton, styles.cancelButton]}
@@ -219,13 +271,26 @@ export default function ScheduleModal({
                                             <Text style={styles.cancelButtonText}>Cancelar</Text>
                                         </TouchableOpacity>
 
-                                        <TouchableOpacity 
-                                            style={[styles.actionButton, styles.rescheduleButton]}
-                                            onPress={handleReschedulePress}
-                                        >
-                                            <Ionicons name="time" size={20} color="#FFFFFF" />
-                                            <Text style={styles.rescheduleButtonText}>Remarcar</Text>
-                                        </TouchableOpacity>
+                                        {selectedNote?.c_status === 'reserved' ? (
+                                            <TouchableOpacity 
+                                                style={[styles.actionButton, styles.confirmButton]}
+                                                onPress={handleConfirmReserved}
+                                                disabled={isLoading}
+                                            >
+                                                <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+                                                <Text style={styles.confirmButtonText}>
+                                                    {isLoading ? 'Confirmando...' : 'Confirmar'}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity 
+                                                style={[styles.actionButton, styles.rescheduleButton]}
+                                                onPress={handleReschedulePress}
+                                            >
+                                                <Ionicons name="time" size={20} color="#FFFFFF" />
+                                                <Text style={styles.rescheduleButtonText}>Remarcar</Text>
+                                            </TouchableOpacity>
+                                        )}
                                     </View>
                                 )}
                             </>
@@ -404,7 +469,10 @@ const styles = {
         backgroundColor: '#e74c3c',
     },
     rescheduleButton: {
-        backgroundColor: rose_theme.rose_main,
+        backgroundColor: '#f39c12', // Yellow-orange color for remarcar
+    },
+    confirmButton: {
+        backgroundColor: '#27ae60', // Green color for confirmar
     },
     cancelButtonText: {
         color: '#FFFFFF',
@@ -412,6 +480,11 @@ const styles = {
         fontWeight: '600' as const,
     },
     rescheduleButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '600' as const,
+    },
+    confirmButtonText: {
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: '600' as const,
