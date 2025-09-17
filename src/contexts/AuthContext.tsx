@@ -7,7 +7,7 @@ interface AuthContextType {
     isLoading: boolean;
     user: AuthUser | null;
     userRole: UserRole | null;
-    login: (emailOrPhone: string, password: string, persistLogin?: boolean) => Promise<{ success: boolean; error?: string }>;
+    login: (emailOrPhone: string, password: string, persistLogin?: boolean) => Promise<{ success: boolean; error?: string; statusCode?: number }>;
     logout: () => Promise<void>;
     checkAuth: () => Promise<void>;
     hasPermission: (permission: string) => boolean;

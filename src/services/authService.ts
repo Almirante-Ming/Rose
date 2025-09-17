@@ -6,7 +6,6 @@ const USER_KEY = 'user_data';
 const PERSIST_LOGIN_KEY = 'persist_login';
 
 
-// permissoes de navegacao, alterar quando criar as telas seguintes.
 const getUserRoleFromLevel = (level: number): UserRole => {
     switch (level) {
         case 0:
