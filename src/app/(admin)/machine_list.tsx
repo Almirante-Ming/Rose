@@ -12,27 +12,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { machinesService } from '@/services';
-import { useAuth } from '@/contexts';
 import { rose_theme } from '@constants/rose_theme';
 import { MachineResponse } from '@constants/types';
 
 export default function MachineList() {
-  const { isAdmin } = useAuth();
   const [machines, setMachines] = useState<MachineResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
-  if (!isAdmin()) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.errorContainer}>
-          <Ionicons name="warning" size={48} color={rose_theme.rose_main} />
-          <Text style={styles.errorTitle}>Acesso negado</Text>
-          <Text style={styles.errorSubText}>Apenas administradores podem acessar esta página</Text>
-        </View>
-      </View>
-    );
-  }
 
   const fetchMachines = async () => {
     try {
@@ -355,24 +341,6 @@ const styles = {
     fontSize: 16,
     color: '#FFFFFF',
     marginTop: 16,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center' as const,
-    alignItems: 'center' as const,
-    padding: 40,
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: 'bold' as const,
-    color: rose_theme.rose_main,
-    marginTop: 16,
-  },
-  errorSubText: {
-    fontSize: 16,
-    color: '#CCCCCC',
-    textAlign: 'center' as const,
-    marginTop: 8,
   },
   emptyContainer: {
     alignItems: 'center' as const,
