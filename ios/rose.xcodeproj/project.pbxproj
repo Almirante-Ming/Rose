@@ -259,13 +259,13 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.rose";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.almrnt.rose";
 				PRODUCT_NAME = "rose";
 				SWIFT_OBJC_BRIDGING_HEADER = "rose/rose-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 				CODE_SIGN_ENTITLEMENTS = rose/rose.entitlements;
 			};
 			name = Debug;
@@ -288,12 +288,12 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.rose";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.almrnt.rose";
 				PRODUCT_NAME = "rose";
 				SWIFT_OBJC_BRIDGING_HEADER = "rose/rose-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 				CODE_SIGN_ENTITLEMENTS = rose/rose.entitlements;
 			};
 			name = Release;

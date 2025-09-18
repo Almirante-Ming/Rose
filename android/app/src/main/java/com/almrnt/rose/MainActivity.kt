@@ -1,4 +1,4 @@
-package com.anonymous.rose
+package com.almrnt.rose
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

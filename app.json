@@ -2,23 +2,23 @@
   "expo": {
     "name": "rose",
     "slug": "rose",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/rose_icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.rose"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.almrnt.rose"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-icon.png",
+        "foregroundImage": "./assets/images/splash-rose.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.rose"
+      "package": "com.almrnt.rose"
     },
     "web": {
       "bundler": "metro",
@@ -30,7 +30,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash-rose.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
