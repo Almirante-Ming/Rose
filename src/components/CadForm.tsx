@@ -273,19 +273,19 @@ export default function CadForm({ config, isAdmin }: CadFormProps) {
             <Text style={styles.label}>
               {field.label} {field.required && '*'}
             </Text>
-            <View style={styles.pickerContainer}>
+            <View style={[styles.pickerContainer, error && styles.inputError]}>
               <Picker
                 selectedValue={value}
                 onValueChange={(itemValue) => handleInputChange(field, itemValue)}
                 style={styles.picker}
-                dropdownIconColor="#FFFFFF"
+                dropdownIconColor="#999"
               >
                 {field.pickerOptions?.map(option => (
                   <Picker.Item 
                     key={option.value} 
                     label={option.label} 
                     value={option.value} 
-                    color="#000000"
+                    color="#333"
                   />
                 ))}
               </Picker>
@@ -454,15 +454,15 @@ const styles = {
     color: '#999',
   },
   pickerContainer: {
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#444',
+    borderColor: '#ddd',
     overflow: 'hidden' as const,
   },
   picker: {
-    color: '#FFFFFF',
-    backgroundColor: '#2a2a2a',
+    color: '#333',
+    backgroundColor: '#fff',
   },
   submitButton: {
     backgroundColor: rose_theme.rose_main,
