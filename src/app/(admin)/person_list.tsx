@@ -241,7 +241,7 @@ export default function Person() {
         <Text style={styles.title}>Lista de Pessoas</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity style={styles.iconButton} onPress={() => setShowFilterModal(true)}>
-            <Ionicons name="options" size={24} color="#FFFFFF" />
+            <Ionicons name="search" size={24} color="#FFFFFF" />
             {(searchName || roleFilter !== 'all') && (
               <View style={styles.filterIndicator}>
                 <View style={styles.filterDot} />

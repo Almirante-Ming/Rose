@@ -107,6 +107,7 @@ export default function NewSchedule() {
     c_status: 'marked',
   });
 
+  const [admins, setAdmins] = useState<PersonResponse[]>([]);
   const [trainers, setTrainers] = useState<PersonResponse[]>([]);
   const [customers, setCustomers] = useState<PersonResponse[]>([]);
   const [machines, setMachines] = useState<MachineResponse[]>([]);
@@ -128,10 +129,11 @@ export default function NewSchedule() {
         machinesService.getMachines(),
       ]);
 
-      // Filter persons by type, excluding admins
+      const adminsData = personsData.filter(person => person.p_type === 'admin');
       const trainersData = personsData.filter(person => person.p_type === 'trainer');
       const customersData = personsData.filter(person => person.p_type === 'customer');
 
+      setAdmins(adminsData);
       setTrainers(trainersData);
       setCustomers(customersData);
       setMachines(machinesData);
@@ -181,7 +183,6 @@ export default function NewSchedule() {
   };
 
   const handleSubmit = async () => {
-    // Validation
     if (!formData.dt_init) {
       Alert.alert('Erro', 'Por favor, selecione uma data.');
       return;
@@ -250,14 +251,15 @@ export default function NewSchedule() {
   }
 
   const selectedTrainer = trainers.find(t => t.id === formData.trainer_id) || null;
-  const selectedCustomer = customers.find(c => c.id === formData.customer_id) || null;
+  const allClients = [...admins, ...customers];
+  const selectedCustomer = allClients.find(c => c.id === formData.customer_id) || null;
   const selectedMachine = machines.find(m => m.id === formData.machine_id) || null;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Ionicons name="calendar" size={32} color={rose_theme.rose_main} />
+          <Ionicons name="calendar" size={32} color="#FFFFFF" />
           <Text style={styles.title}>Novo Agendamento</Text>
         </View>
 
@@ -305,7 +307,7 @@ export default function NewSchedule() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Cliente</Text>
             <FilterableSelect
-              data={customers.map(c => ({ id: c.id, name: c.name }))}
+              data={allClients.map(c => ({ id: c.id, name: c.name }))}
               onSelect={(item) => setFormData(prev => ({ ...prev, customer_id: item.id }))}
               placeholder="Selecione um cliente"
               selectedValue={selectedCustomer ? { id: selectedCustomer.id, name: selectedCustomer.name } : null}
@@ -383,7 +385,7 @@ export default function NewSchedule() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
+    backgroundColor: rose_theme.rose_dark,
   },
   scrollContainer: {
     flex: 1,
@@ -401,8 +403,9 @@ const styles = {
   header: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
+    justifyContent: 'center' as const,
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 40,
     gap: 12,
   },
   title: {
@@ -411,7 +414,15 @@ const styles = {
     color: '#FFFFFF',
   },
   form: {
+    backgroundColor: rose_theme.rose_light,
+    borderRadius: 15,
     padding: 20,
+    margin: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
     gap: 20,
   },
   inputGroup: {
@@ -426,47 +437,47 @@ const styles = {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
     borderWidth: 1,
-    borderColor: '#444',
+    borderColor: '#ddd',
   },
   dateTimeButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#333',
   },
   selectButton: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
     borderWidth: 1,
-    borderColor: '#444',
+    borderColor: '#ddd',
   },
   selectButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#333',
   },
   placeholder: {
     color: '#999',
   },
   textArea: {
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
     borderWidth: 1,
-    borderColor: '#444',
-    color: '#FFFFFF',
+    borderColor: '#ddd',
+    color: '#333',
     fontSize: 16,
     minHeight: 80,
   },
   submitButton: {
     backgroundColor: rose_theme.rose_main,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 8,
+    padding: 15,
     flexDirection: 'row' as const,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -477,8 +488,8 @@ const styles = {
     opacity: 0.6,
   },
   submitButtonText: {
-    fontSize: 16,
-    fontWeight: '600' as const,
+    fontSize: 18,
+    fontWeight: 'bold' as const,
     color: '#FFFFFF',
   },
   modalOverlay: {
@@ -488,11 +499,13 @@ const styles = {
     alignItems: 'center' as const,
   },
   modalContent: {
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
-    margin: 20,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    margin: 0,
+    marginTop: 'auto' as any,
     maxHeight: '80%' as any,
-    width: '90%' as any,
+    width: '100%' as any,
   },
   modalHeader: {
     flexDirection: 'row' as const,
@@ -500,23 +513,22 @@ const styles = {
     alignItems: 'center' as const,
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#444',
+    borderBottomColor: '#E0E0E0',
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '600' as const,
-    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold' as const,
+    color: '#333',
   },
   searchInput: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: 8,
-    padding: 12,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    padding: 15,
     margin: 20,
     marginBottom: 10,
-    color: '#FFFFFF',
+    color: '#333',
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#444',
+    borderWidth: 0,
   },
   selectList: {
     maxHeight: 300,
@@ -524,10 +536,10 @@ const styles = {
   selectItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#444',
+    borderBottomColor: '#E0E0E0',
   },
   selectItemText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#333',
   },
 };

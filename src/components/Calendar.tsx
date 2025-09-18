@@ -1,6 +1,6 @@
 import { Platform, NativeModules } from 'react-native';
 import { Calendar as RNCalendar, LocaleConfig } from 'react-native-calendars';
-import { CalendarDay } from '@constants/types';
+import { CalendarDay, NotesData } from '@constants/types';
 import { rose_callendar } from '@/styles';
 import { rose_theme } from '@constants/rose_theme';
 
@@ -51,13 +51,36 @@ LocaleConfig.defaultLocale = getSystemLocale();
 interface CalendarProps {
     selectedDate: string;
     onDayPress: (day: CalendarDay) => void;
+    notes?: NotesData;
 }
 
-export default function Calendar({ selectedDate, onDayPress }: CalendarProps) {
+export default function Calendar({ selectedDate, onDayPress, notes = {} }: CalendarProps) {
+    // Create marked dates object that includes both selected date and days with schedules
+    const markedDates: any = {};
+    
+    // Mark days with schedules
+    Object.keys(notes).forEach(date => {
+        if (notes[date] && notes[date].length > 0) {
+            markedDates[date] = {
+                marked: true,
+                dotColor: rose_theme.rose_lightest,
+            };
+        }
+    });
+    
+    // Mark selected date (this will override schedule marking if it's the same date)
+    if (selectedDate) {
+        markedDates[selectedDate] = {
+            ...markedDates[selectedDate],
+            selected: true,
+            selectedColor: rose_theme.rose_lightest,
+        };
+    }
+
     return (
         <RNCalendar
             onDayPress={onDayPress}
-            markedDates={{[selectedDate]: { selected: true, selectedColor: rose_theme.rose_lightest }}}
+            markedDates={markedDates}
             theme={rose_callendar}
             monthFormat={'MMMM yyyy'}
             disableMonthChange={false}

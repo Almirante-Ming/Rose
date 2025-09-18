@@ -32,14 +32,12 @@ export default function MachineList() {
   const applyFiltersAndSort = (data: MachineResponse[], nameFilter: string, sortField: 'id' | 'name', order: 'asc' | 'desc') => {
     let filtered = data;
 
-    // Apply name filter
     if (nameFilter.trim()) {
       filtered = data.filter(machine => 
         machine.name.toLowerCase().includes(nameFilter.toLowerCase())
       );
     }
 
-    // Apply sorting
     const sorted = [...filtered].sort((a, b) => {
       let aValue: string | number;
       let bValue: string | number;
@@ -182,7 +180,7 @@ export default function MachineList() {
         <Text style={styles.title}>Lista de Atividades</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity style={styles.iconButton} onPress={() => setShowFilterModal(true)}>
-            <Ionicons name="options" size={24} color="#FFFFFF" />
+            <Ionicons name="search" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
             <Ionicons name="refresh" size={24} color="#FFFFFF" />

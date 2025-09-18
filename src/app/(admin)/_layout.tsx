@@ -33,7 +33,7 @@ export default function AdminTabLayout() {
         }}
       />
       <Tabs.Screen
-        name="person"
+        name="person_list"
         options={{
           title: 'Pessoas',
           tabBarIcon: ({ color, focused }) => (

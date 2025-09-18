@@ -156,6 +156,7 @@ export default function Home() {
                 <Calendar
                     selectedDate={selectedDate}
                     onDayPress={handleDayPress}
+                    notes={notes}
                 />
             </View>
             

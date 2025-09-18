@@ -8,7 +8,7 @@ export const rose_callendar = {
     selectedDayTextColor: '#FFFFFF',
     todayTextColor: '#FFA500',
     dayTextColor: '#FFFFFF',
-    textDisabledColor: '#666666',
+    textDisabledColor: '#a49e9eff',
     dotColor: rose_theme.rose_lightest,
     selectedDotColor: '#FFFFFF',
     arrowColor: '#FFA500',
