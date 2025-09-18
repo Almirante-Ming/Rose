@@ -10,7 +10,6 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [persistLogin, setPersistLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
     const [passwordFocused, setPasswordFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -23,28 +22,37 @@ export default function LoginScreen() {
     const { login } = useAuth();
 
     useEffect(() => {
-        // Initialize config when component mounts
         configService.loadConfig();
     }, []);
 
     const handleLogin = async () => {
         if (!emailOrPhone.trim() || !password.trim()) {
-            setError('Por favor, preencha todos os campos');
+            Alert.alert('Erro', 'Por favor, preencha todos os campos');
             return;
         }
 
         setIsLoading(true);
-        setError('');
 
         try {
             const result = await login(emailOrPhone.trim(), password.trim(), persistLogin);
 
-            if (result.success) {
-            } else {
-                setError(result.error || 'Erro no login');
+            if (!result.success) {
+                if (result.statusCode === 401 || result.error === 'UNAUTHORIZED_401') {
+                    Alert.alert('Erro de Autenticação', 'Credenciais de acesso incorretas ou não autorizadas');
+                    return;
+                }
+                
+                Alert.alert('Erro', result.error || 'Erro no login');
+                return;
             }
-        } catch (error) {
-            setError('Erro de conexão. Tente novamente.');
+
+        } catch (error: any) {
+            if (error.response?.status === 401) {
+                Alert.alert('Erro de Autenticação', 'Credenciais de acesso incorretas ou não autorizadas');
+                return;
+            }
+        
+            Alert.alert('Erro', 'Erro de conexão. Tente novamente.');
         } finally {
             setIsLoading(false);
         }
@@ -64,8 +72,15 @@ export default function LoginScreen() {
         
         try {
             const result = await authUtils.checkApiStatus();
+            
+            if (!result.success) {
+                setStatusMessage(result.message);
+                setStatusType('error');
+                return;
+            }
+            
             setStatusMessage(result.message);
-            setStatusType(result.success ? 'success' : 'error');
+            setStatusType('success');
         } catch (error) {
             setStatusMessage('Falha ao conectar ao Tinto, contacte o suporte');
             setStatusType('error');
@@ -73,11 +88,14 @@ export default function LoginScreen() {
     };
 
     const isValidInput = () => {
-        return emailOrPhone.trim().length > 0 && password.trim().length > 0;
+        if (!emailOrPhone.trim() || !password.trim()) {
+            return false;
+        }
+        
+        return true;
     };
 
     const openConfigModal = () => {
-        // Load current tinto URL from config service
         setTempTintoUrl(configService.getTintoUrl());
         setShowConfigModal(true);
     };
@@ -93,10 +111,11 @@ export default function LoginScreen() {
             return;
         }
 
-        // Basic URL validation
-        const urlPattern = /^https?:\/\/.+/;
+        const urlPattern = /^https?:\/\/([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+(:[0-9]+)?(\/.*)?$|^https?:\/\/(\d{1,3}\.){3}\d{1,3}(:[0-9]+)?(\/.*)?$/;
         if (!urlPattern.test(tempTintoUrl.trim())) {
-            Alert.alert('Erro', 'Por favor, insira uma URL válida (deve começar com http:// ou https://)');
+            Alert.alert(
+                'Erro', 'Por favor, insira uma URL válida'
+            );
             return;
         }
 
@@ -104,7 +123,7 @@ export default function LoginScreen() {
             await configService.setTintoUrl(tempTintoUrl.trim());
             Alert.alert(
                 'Configuração Salva',
-                'A URL do servidor foi atualizada com sucesso!',
+                'Endereco do servidor foi atualizado',
                 [{ text: 'OK', onPress: closeConfigModal }]
             );
         } catch (error) {
@@ -115,7 +134,7 @@ export default function LoginScreen() {
     const resetConfig = async () => {
         Alert.alert(
             'Restaurar Configuração Padrão',
-            'Deseja restaurar a URL padrão do servidor?',
+            'Deseja restaurar ao endereco padrao do servidor ?',
             [
                 { text: 'Cancelar', style: 'cancel' },
                 {
@@ -152,8 +171,6 @@ export default function LoginScreen() {
                 <View>
                     <Text style={loginStyles.logo}>Rosè</Text>
                     <Text style={loginStyles.subtitle}>Entre para acessar suas aulas</Text>
-
-                    {error ? <Text style={loginStyles.errorText}>{error}</Text> : null}
 
                     <View style={loginStyles.inputContainer}>
                         <Text style={loginStyles.label}>Email ou Telefone</Text>
@@ -291,7 +308,7 @@ export default function LoginScreen() {
                                 onChangeText={setTempTintoUrl}
                                 onFocus={() => setConfigInputFocused(true)}
                                 onBlur={() => setConfigInputFocused(false)}
-                                placeholder="https://exemplo.ngrok-free.app"
+                                placeholder="Ex: http://192.168.1.100:3000"
                                 placeholderTextColor="#b3b3b3"
                                 keyboardType="url"
                                 autoCapitalize="none"

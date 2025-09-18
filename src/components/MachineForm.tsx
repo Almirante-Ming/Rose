@@ -7,7 +7,7 @@ const machineFormFields: FormField[] = [
     key: 'name',
     type: 'text',
     label: 'Nome',
-    placeholder: 'Digite o nome do procedimento',
+    placeholder: 'procedimento/atividade',
     required: true,
     autoCapitalize: 'words',
     validation: (value: string) => {
@@ -42,8 +42,8 @@ export default function MachineForm({ isAdmin, showBackButton = false }: Machine
   const config: CadFormConfig = {
     title: 'Registrar Atividade',
     icon: 'construct',
-    submitButtonText: 'Registrar Máquina',
-    successMessage: 'Máquina registrada com sucesso!',
+    submitButtonText: 'Registrar Atividade',
+    successMessage: 'Atividade registrada com sucesso!',
     fields: machineFormFields,
     onSubmit: handleSubmit,
     requiresAdmin: true,

@@ -19,7 +19,7 @@ export interface ApiStatusResponse {
 }
 
 export const authUtils = {
-    async login(credentials: LoginCredentials): Promise<{ success: boolean; error?: string }> {
+    async login(credentials: LoginCredentials): Promise<{ success: boolean; error?: string; statusCode?: number }> {
         try {
             const response = await apiService.postForm<LoginResponse>('/login', {
                 username: credentials.emailOrPhone,
@@ -56,7 +56,10 @@ export const authUtils = {
             
             return { success: true };
         } catch (error: any) {
-            console.error('Login failed:', error);
+            if (error.response?.status === 401) {
+                return { success: false, error: 'UNAUTHORIZED_401', statusCode: 401 };
+            }
+            
             const errorMessage = error.response?.data?.message || error.message || 'Login failed. Please try again.';
             return { success: false, error: errorMessage };
         }
