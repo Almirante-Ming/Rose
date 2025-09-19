@@ -10,12 +10,13 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.almrnt.rose"
+      "bundleIdentifier": "com.almrnt.rose",
+      "icon": "./assets/images/rose_icon.png"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-rose.png",
+        "foregroundImage": "./assets/images/rose_icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.almrnt.rose"
