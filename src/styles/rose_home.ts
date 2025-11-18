@@ -5,7 +5,7 @@ export const rose_home = StyleSheet.create({
 container: { 
     flex: 1,
     padding: 20, 
-    backgroundColor: rose_theme.rose_dark
+    backgroundColor: rose_theme.dark_bg
 },
 header: {
     flexDirection: 'row',
@@ -21,29 +21,33 @@ userInfo: {
 welcomeText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     marginBottom: 2,
 },
 roleText: {
     fontSize: 14,
-    color: '#CCCCCC',
+    color: rose_theme.text_secondary,
 },
 logoutButton: {
-    backgroundColor: rose_theme.rose_light,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 6,
 },
 logoutText: {
-    color: '#FFFFFF',
+    color: rose_theme.rose_main,
     fontSize: 14,
     fontWeight: '600',
 },
 calendarContainer: {
-    backgroundColor: rose_theme.rose_light,
+    backgroundColor: rose_theme.dark_surface,
     borderRadius: 15,
     padding: 10,
     marginBottom: 0,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
 },
 modalBackground: { 
     position: 'absolute', 
@@ -59,16 +63,18 @@ modalWrapper: {
 modalContainer: { 
     height: '50%', 
     width: '100%', 
-    backgroundColor: '#ae2831', 
+    backgroundColor: rose_theme.dark_surface, 
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20, 
-    padding: 20 
+    padding: 20,
+    borderTopWidth: 3,
+    borderTopColor: rose_theme.rose_main
 },
 title: { 
     fontSize: 18, 
     fontWeight: 'bold', 
     marginBottom: 10, 
-    color: '#FFFFFF', 
+    color: rose_theme.text_light, 
     textAlign: 'center' 
 },
 card: { 
@@ -98,8 +104,11 @@ cardTime: {
 cardSubject: { 
     fontSize: 18, 
     fontWeight: 'bold', 
-    color: '#ae2831', 
-    marginTop: 5 
+    color: rose_theme.text_dark, 
+    marginTop: 5,
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
+    paddingBottom: 5
 },
 cardLocation: { 
     fontSize: 14, 
@@ -113,23 +122,25 @@ cardNote: {
 },
 emptyText: { 
     fontSize: 14, 
-    color: '#DDD', 
+    color: rose_theme.text_secondary, 
     textAlign: 'center', 
     marginTop: 20 
 },
 loadingText: { 
     fontSize: 14, 
-    color: '#FFF', 
+    color: rose_theme.text_light, 
     textAlign: 'center', 
     marginTop: 20 
 },
 notesSection: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: '#ae2831',
+    backgroundColor: rose_theme.dark_surface,
     borderRadius: 15,
     padding: 15,
-    marginBottom: 20, // Add bottom margin to respect safe area
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
 },
 notesListContainer: {
     position: 'relative',
@@ -149,7 +160,7 @@ downArrowContainer: {
 notesSectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     textAlign: 'center',
     marginBottom: 15,
 },
@@ -185,8 +196,11 @@ noteCardTime: {
 noteCardSubject: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#810e13',
+    color: rose_theme.text_dark,
     marginTop: 5,
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
+    paddingBottom: 3,
 },
 noteCardTrainer: {
     fontSize: 13,
@@ -209,7 +223,10 @@ modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
+    paddingBottom: 10,
     textAlign: 'center',
 },
 modalContent: {

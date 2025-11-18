@@ -5,11 +5,12 @@ export default function TrainerTabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#ffd33d',
-        headerStyle: { backgroundColor: '#25292e' },
+        tabBarActiveTintColor: '#d32f2f',
+        tabBarInactiveTintColor: '#888888',
+        headerStyle: { backgroundColor: '#2a2a2a' },
         headerShadowVisible: false,
-        headerTintColor: '#fff',
-        tabBarStyle: { backgroundColor: '#25292e' },
+        headerTintColor: '#ffffff',
+        tabBarStyle: { backgroundColor: '#1a1a1a', borderTopColor: '#d32f2f', borderTopWidth: 2 },
       }}
     >
       <Tabs.Screen

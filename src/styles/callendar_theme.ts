@@ -1,17 +1,17 @@
 import { rose_theme } from '@constants/rose_theme';
 
 export const rose_callendar = {
-    backgroundColor: rose_theme.rose_main,
-    calendarBackground: rose_theme.rose_main,  
+    backgroundColor: rose_theme.gray_dark,
+    calendarBackground: rose_theme.gray_dark,  
     textSectionTitleColor: '#FFFFFF',
-    selectedDayBackgroundColor: rose_theme.rose_lightest,
-    selectedDayTextColor: '#FFFFFF',
-    todayTextColor: '#FFA500',
+    selectedDayBackgroundColor: '#FFFFFF',
+    selectedDayTextColor: rose_theme.rose_main,
+    todayTextColor: '#FFD700',
     dayTextColor: '#FFFFFF',
     textDisabledColor: '#a49e9eff',
-    dotColor: rose_theme.rose_lightest,
-    selectedDotColor: '#FFFFFF',
-    arrowColor: '#FFA500',
+    dotColor: '#FFFFFF',
+    selectedDotColor: rose_theme.rose_main,
+    arrowColor: '#FFFFFF',
     monthTextColor: '#FFFFFF',
-    indicatorColor: '#FFA500',
+    indicatorColor: '#FFFFFF',
 };
