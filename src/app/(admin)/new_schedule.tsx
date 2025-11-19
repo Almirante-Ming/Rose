@@ -200,7 +200,7 @@ export default function NewSchedule() {
       return;
     }
     if (!formData.machine_id) {
-      Alert.alert('Erro', 'Por favor, selecione uma máquina.');
+      Alert.alert('Erro', 'Por favor, selecione uma atividade.');
       return;
     }
 
@@ -215,7 +215,6 @@ export default function NewSchedule() {
           {
             text: 'OK',
             onPress: () => {
-              // Reset form
               setFormData({
                 dt_init: '',
                 tm_init: '',
@@ -316,11 +315,11 @@ export default function NewSchedule() {
 
           {/* Machine Select */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Máquina</Text>
+            <Text style={styles.label}>Atividade</Text>
             <FilterableSelect
               data={machines.map(m => ({ id: m.id, name: m.name }))}
               onSelect={(item) => setFormData(prev => ({ ...prev, machine_id: item.id }))}
-              placeholder="Selecione uma máquina"
+              placeholder="Selecione uma atividade"
               selectedValue={selectedMachine ? { id: selectedMachine.id, name: selectedMachine.name } : null}
             />
           </View>
@@ -385,7 +384,7 @@ export default function NewSchedule() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: rose_theme.rose_dark,
+    backgroundColor: rose_theme.dark_bg,
   },
   scrollContainer: {
     flex: 1,
@@ -397,7 +396,7 @@ const styles = {
   },
   loadingText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     marginTop: 16,
   },
   header: {
@@ -411,13 +410,15 @@ const styles = {
   title: {
     fontSize: 24,
     fontWeight: 'bold' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
   },
   form: {
-    backgroundColor: rose_theme.rose_light,
+    backgroundColor: rose_theme.dark_surface,
     borderRadius: 15,
     padding: 20,
     margin: 20,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -431,46 +432,46 @@ const styles = {
   label: {
     fontSize: 16,
     fontWeight: '600' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
   },
   dateTimeButton: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#fff',
+    backgroundColor: rose_theme.light_surface,
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: rose_theme.rose_main,
   },
   dateTimeButtonText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_dark,
   },
   selectButton: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#fff',
+    backgroundColor: rose_theme.light_surface,
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: rose_theme.rose_main,
   },
   selectButtonText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_dark,
   },
   placeholder: {
-    color: '#999',
+    color: rose_theme.text_secondary,
   },
   textArea: {
-    backgroundColor: '#fff',
+    backgroundColor: rose_theme.light_surface,
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ddd',
-    color: '#333',
+    borderColor: rose_theme.rose_main,
+    color: rose_theme.text_dark,
     fontSize: 16,
     minHeight: 80,
   },
@@ -490,7 +491,7 @@ const styles = {
   submitButtonText: {
     fontSize: 18,
     fontWeight: 'bold' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
   },
   modalOverlay: {
     flex: 1,
@@ -499,36 +500,39 @@ const styles = {
     alignItems: 'center' as const,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: rose_theme.light_surface,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     margin: 0,
     marginTop: 'auto' as any,
     maxHeight: '80%' as any,
     width: '100%' as any,
+    borderTopWidth: 3,
+    borderTopColor: rose_theme.rose_main,
   },
   modalHeader: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold' as const,
-    color: '#333',
+    color: rose_theme.text_dark,
   },
   searchInput: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: rose_theme.light_bg,
     borderRadius: 10,
     padding: 15,
     margin: 20,
     marginBottom: 10,
-    color: '#333',
+    color: rose_theme.text_dark,
     fontSize: 16,
-    borderWidth: 0,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
   },
   selectList: {
     maxHeight: 300,
@@ -536,10 +540,10 @@ const styles = {
   selectItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: rose_theme.gray_light,
   },
   selectItemText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_dark,
   },
 };

@@ -54,7 +54,7 @@ class ConfigService {
     async clearConfig(): Promise<void> {
         try {
             await AsyncStorage.removeItem(CONFIG_KEYS.TINTO_URL);
-            this.tintoUrl = 'https://a1105820efa2.ngrok-free.app'; // Reset to default
+            this.tintoUrl = 'https://tinto.com.br'; // Reset to default
             
             // Update apiService base URL to default
             const { apiService } = await import('./apiService');

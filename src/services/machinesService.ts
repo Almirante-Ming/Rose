@@ -4,7 +4,7 @@ import { MachineResponse, MachineData } from '@constants/types';
 class MachinesService {
   async getMachines(): Promise<MachineResponse[]> {
     try {
-      const response = await apiService.get<MachineResponse[]>('/machines/');
+      const response = await apiService.get<MachineResponse[]>('/machines');
       return response;
     } catch (error) {
       console.error('Error fetching machines:', error);
