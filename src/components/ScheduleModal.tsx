@@ -48,7 +48,6 @@ export default function ScheduleModal({
 
         setIsLoading(true);
         try {
-            // Create updated schedule with cancel reason in message
             const updatedSchedule = {
                 ...selectedNote,
                 message: cancelReason.trim() || selectedNote.message
@@ -83,6 +82,13 @@ export default function ScheduleModal({
     const handleCancelModalClose = () => {
         setShowCancelModal(false);
         setCancelReason('');
+    };
+
+    const formatDateDisplay = (dateString: string): string => {
+        // Convert yyyy-mm-dd to dd/mm/yyyy
+        if (!dateString || dateString.length !== 10) return dateString;
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
     };
 
     const handleReschedulePress = () => {
@@ -221,7 +227,7 @@ export default function ScheduleModal({
                                     <View style={rose_home.modalContent}>
                                     <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Data:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.dt_init}</Text>
+                                        <Text style={rose_home.modalValue}>{formatDateDisplay(selectedNote.dt_init)}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Horário:</Text>
@@ -277,7 +283,7 @@ export default function ScheduleModal({
                                         {selectedNote?.c_status === 'reserved' ? (
                                             canConfirm ? (
                                                 <TouchableOpacity 
-                                                    style={[styles.actionButton, styles.confirmButton]}
+                                                    style={[styles.actionButton, styles.confirmButton, { backgroundColor: '#27ae60' }]}
                                                     onPress={handleConfirmReserved}
                                                     disabled={isLoading}
                                                 >
@@ -292,7 +298,7 @@ export default function ScheduleModal({
                                             )
                                         ) : (
                                             <TouchableOpacity 
-                                                style={[styles.actionButton, styles.rescheduleButton]}
+                                                style={[styles.actionButton, styles.rescheduleButton, { backgroundColor: '#f39c12' }]}
                                                 onPress={handleReschedulePress}
                                             >
                                                 <Ionicons name="time" size={20} color="#FFFFFF" />
@@ -476,11 +482,11 @@ const styles = {
     cancelButton: {
         backgroundColor: rose_theme.rose_main,
     },
-    rescheduleButton: {
-        backgroundColor: rose_theme.rose_main,
-    },
     confirmButton: {
-        backgroundColor: rose_theme.rose_main,
+        // backgroundColor will be overridden to green (#27ae60) when c_status is 'reserved'
+    },
+    rescheduleButton: {
+        // backgroundColor will be overridden to yellow-orange (#f39c12) when c_status is 'marked'
     },
     cancelButtonText: {
         color: rose_theme.text_light,
