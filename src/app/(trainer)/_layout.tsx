@@ -33,6 +33,16 @@ export default function TrainerTabLayout() {
           headerShown: false,
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={24} />
+          ),
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }

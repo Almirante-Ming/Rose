@@ -72,6 +72,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const currentUserRole = await authUtils.getCurrentUserRole();
             setUser(currentUser);
             setUserRole(currentUserRole);
+            
+            try {
+                const { authService } = await import('@/services');
+                await authService.savePassword(password);
+            } catch (error) {
+                console.error('Error saving password:', error);
+            }
         }
         
         return result;

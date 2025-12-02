@@ -4,6 +4,7 @@ import { JwtPayload, AuthUser, UserRole } from '@constants/types';
 const TOKEN_KEY = 'jwt_token';
 const USER_KEY = 'user_data';
 const PERSIST_LOGIN_KEY = 'persist_login';
+const PASSWORD_KEY = 'user_password';
 
 
 const getUserRoleFromLevel = (level: number): UserRole => {
@@ -200,6 +201,33 @@ export const authService = {
         } catch (error) {
             console.error('Error checking authentication:', error);
             return false;
+        }
+    },
+
+    async savePassword(password: string): Promise<void> {
+        try {
+            await SecureStore.setItemAsync(PASSWORD_KEY, password);
+        } catch (error) {
+            console.error('Error saving password:', error);
+            throw error;
+        }
+    },
+
+    async getPassword(): Promise<string | null> {
+        try {
+            return await SecureStore.getItemAsync(PASSWORD_KEY);
+        } catch (error) {
+            console.error('Error getting password:', error);
+            return null;
+        }
+    },
+
+    async deletePassword(): Promise<void> {
+        try {
+            await SecureStore.deleteItemAsync(PASSWORD_KEY);
+        } catch (error) {
+            console.error('Error deleting password:', error);
+            throw error;
         }
     }
 };
