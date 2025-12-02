@@ -384,7 +384,6 @@ export default function Profile() {
             placeholder="000.000.000-00"
             placeholderTextColor="#666666"
           />
-          <Text style={{ fontSize: 12, color: '#888888', marginTop: 4 }}>CPF não pode ser alterado</Text>
         </View>
 
         {/* Date of Birth */}
@@ -410,32 +409,17 @@ export default function Profile() {
         {/* Type */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Tipo de Pessoa</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={formData.p_type || 'customer'}
-              onValueChange={(value) => handleFieldChange('p_type', value)}
-              style={{ color: '#ffffff' }}
-            >
-              <Picker.Item label="Cliente" value="customer" />
-              <Picker.Item label="Instrutor" value="trainer" />
-              <Picker.Item label="Administrador" value="admin" />
-            </Picker>
-          </View>
+          <Text style={[styles.input, { paddingVertical: 16, color: '#aaaaaa' }]}>
+            {formData.p_type === 'customer' ? 'Cliente' : formData.p_type === 'trainer' ? 'Instrutor' : 'Administrador'}
+          </Text>
         </View>
 
         {/* State */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Status</Text>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={formData.state || 'active'}
-              onValueChange={(value) => handleFieldChange('state', value)}
-              style={{ color: '#ffffff' }}
-            >
-              <Picker.Item label="Ativo" value="active" />
-              <Picker.Item label="Inativo" value="inactive" />
-            </Picker>
-          </View>
+          <Text style={[styles.input, { paddingVertical: 16, color: '#aaaaaa' }]}>
+            {formData.state === 'active' ? 'Ativo' : 'Inativo'}
+          </Text>
         </View>
 
         {/* Created At */}

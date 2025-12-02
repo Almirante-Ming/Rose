@@ -384,7 +384,6 @@ export default function Profile() {
             placeholder="000.000.000-00"
             placeholderTextColor="#666666"
           />
-          <Text style={{ fontSize: 12, color: '#888888', marginTop: 4 }}>CPF não pode ser alterado</Text>
         </View>
 
         {/* Date of Birth */}
