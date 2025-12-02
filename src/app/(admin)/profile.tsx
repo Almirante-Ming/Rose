@@ -433,6 +433,7 @@ export default function Profile() {
             >
               <Picker.Item label="Ativo" value="active" />
               <Picker.Item label="Inativo" value="inactive" />
+              <Picker.Item label="Desativado" value="deleted" />
             </Picker>
           </View>
         </View>
