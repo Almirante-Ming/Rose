@@ -229,7 +229,7 @@ export default function MachineList() {
                 style={styles.closeButton}
                 onPress={() => setShowFilterModal(false)}
               >
-                <Ionicons name="close" size={24} color="#333" />
+                <Ionicons name="close" size={24} color={rose_theme.text_light} />
               </TouchableOpacity>
             </View>
 

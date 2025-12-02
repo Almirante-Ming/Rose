@@ -62,7 +62,7 @@ const FilterableSelect: React.FC<FilterableSelectProps> = ({
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{placeholder}</Text>
               <TouchableOpacity onPress={() => setIsVisible(false)}>
-                <Ionicons name="close" size={24} color="#333" />
+                <Ionicons name="close" size={24} color={rose_theme.text_light} />
               </TouchableOpacity>
             </View>
 
