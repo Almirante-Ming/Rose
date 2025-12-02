@@ -422,6 +422,7 @@ const styles = {
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginBottom: 40,
   },
   inputContainer: {
     marginBottom: 20,
