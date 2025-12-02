@@ -148,7 +148,7 @@ export default function MachineList() {
       [
         { text: 'Cancelar', style: 'cancel' },
         {
-          text: 'Deletar',
+          text: 'Apagar',
           style: 'destructive',
           onPress: async () => {
             setIsSubmitting(true);
@@ -471,7 +471,7 @@ export default function MachineList() {
                     disabled={isSubmitting}
                   >
                     <Ionicons name="trash" size={20} color="#FFFFFF" />
-                    <Text style={styles.deleteButtonText}>Deletar</Text>
+                    <Text style={styles.deleteButtonText}>Apagar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.saveButton, isSubmitting && styles.buttonDisabled]}

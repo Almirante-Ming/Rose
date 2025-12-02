@@ -3,9 +3,11 @@ import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity,RefreshContr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useAuth } from '@/contexts';
 import { personsService } from '@/services';
 import { rose_theme } from '@constants/rose_theme';
 import { PersonResponse } from '@constants/types';
+import PersonEditModal from '@/components/PersonEditModal';
 
 export default function Person() {
   const [persons, setPersons] = useState<PersonResponse[]>([]);
@@ -13,28 +15,28 @@ export default function Person() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'trainer' | 'customer'>('all');
   const [sortBy, setSortBy] = useState<'id' | 'name' | 'created_at'>('id');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [editingPerson, setEditingPerson] = useState<PersonResponse | null>(null);
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
 
   const applyFiltersAndSort = (data: PersonResponse[], nameFilter: string, roleFilterValue: 'all' | 'admin' | 'trainer' | 'customer', sortField: 'id' | 'name' | 'created_at', order: 'asc' | 'desc') => {
     let filtered = data;
 
-    // Apply name filter
     if (nameFilter.trim()) {
       filtered = filtered.filter(person => 
         person.name.toLowerCase().includes(nameFilter.toLowerCase())
       );
     }
 
-    // Apply role filter
     if (roleFilterValue !== 'all') {
       filtered = filtered.filter(person => person.p_type === roleFilterValue);
     }
 
-    // Apply sorting
     const sorted = [...filtered].sort((a, b) => {
       let aValue: string | number;
       let bValue: string | number;
@@ -170,8 +172,26 @@ export default function Person() {
     return state === 'active' ? '#27ae60' : '#e74c3c';
   };
 
+  const handleOpenEditModal = (person: PersonResponse) => {
+    setEditingPerson(person);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setEditingPerson(null);
+  };
+
+  const handleEditSuccess = () => {
+    fetchPersons();
+  };
+
   const renderPersonCard = ({ item }: { item: PersonResponse }) => (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card}
+      onPress={() => handleOpenEditModal(item)}
+      activeOpacity={0.7}
+    >
       <View style={styles.cardHeader}>
         <View style={styles.cardHeaderLeft}>
           <Text style={styles.personName}>{item.name}</Text>
@@ -220,7 +240,7 @@ export default function Person() {
           <Text style={styles.infoValue}>{formatDate(item.dt_create)}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   if (isLoading) {
@@ -437,6 +457,14 @@ export default function Person() {
           </View>
         </View>
       </Modal>
+
+      {/* Edit Person Modal Component */}
+      <PersonEditModal
+        visible={showEditModal}
+        editingPerson={editingPerson}
+        onClose={handleCloseEditModal}
+        onSuccess={handleEditSuccess}
+      />
     </View>
   );
 }
@@ -754,5 +782,168 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     fontWeight: 'bold',
+  },
+  // Edit modal styles
+  modalKeyboardAvoidingView: {
+    flex: 1,
+  },
+  editModalContent: {
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    margin: 20,
+    maxHeight: '90%',
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
+  },
+  editFormContainer: {
+    padding: 20,
+    paddingBottom: 20,
+  },
+  inputGroup: {
+    marginBottom: 16,
+  },
+  inputGroupLast: {
+    marginBottom: 30,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: rose_theme.text_light,
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: rose_theme.text_light,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  inputDisabled: {
+    backgroundColor: '#1a1a1a',
+    opacity: 0.7,
+  },
+  dateInput: {
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  dateInputText: {
+    color: rose_theme.text_light,
+    fontSize: 14,
+    flex: 1,
+  },
+  pickerContainer: {
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+    overflow: 'hidden',
+  },
+  picker: {
+    color: rose_theme.text_light,
+  },
+  stateButtonsContainer: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  stateButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: rose_theme.dark_surface,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+    alignItems: 'center',
+  },
+  stateButtonActive: {
+    backgroundColor: rose_theme.rose_main,
+    borderColor: rose_theme.rose_main,
+  },
+  stateButtonText: {
+    fontSize: 14,
+    color: rose_theme.text_light,
+    fontWeight: '500',
+  },
+  stateButtonTextActive: {
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  passwordSection: {
+    marginTop: 24,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: rose_theme.rose_main,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: rose_theme.text_light,
+    marginBottom: 4,
+  },
+  sectionSubtitle: {
+    fontSize: 12,
+    color: '#999',
+    marginBottom: 16,
+  },
+  saveButton: {
+    backgroundColor: '#27ae60',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    gap: 8,
+    margin: 20,
+  },
+  saveButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  // Edit Modal Styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: rose_theme.rose_dark,
+  },
+  editModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: rose_theme.rose_main,
+  },
+  editModalHeaderTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  editFormScrollView: {
+    flex: 1,
+    padding: 20,
   },
 });
