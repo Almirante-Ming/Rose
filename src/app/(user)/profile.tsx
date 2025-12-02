@@ -6,7 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts';
 import { personsService, authService } from '@/services';
-import { PersonResponse } from '@constants/types';
+import { PersonResponse, PersonData } from '@constants/types';
 import { rose_theme } from '@constants/rose_theme';
 
 const styles = {
@@ -28,7 +28,7 @@ const styles = {
   },
   headerText: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '700' as const,
     color: '#ffffff',
   },
   formGroup: {
@@ -36,7 +36,7 @@ const styles = {
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#ffffff',
     marginBottom: 8,
   },
@@ -97,7 +97,7 @@ const styles = {
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#ffffff',
   },
   loadingContainer: {
@@ -115,7 +115,7 @@ const styles = {
   },
   errorText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: rose_theme.rose_main,
     marginTop: 16,
   },
@@ -217,10 +217,17 @@ export default function Profile() {
       setIsSaving(true);
       
       // Filter only changed fields
-      const changedData: Partial<PersonResponse> = {};
+      const changedData: Partial<PersonData> = {};
       Object.keys(formData).forEach(key => {
         if (profileData[key as keyof PersonResponse] !== formData[key as keyof PersonResponse]) {
-          changedData[key as keyof PersonResponse] = formData[key as keyof PersonResponse];
+          const value = formData[key as keyof PersonResponse];
+          if (key === 'state') {
+            if (value === 'active' || value === 'inactive') {
+              (changedData as any)[key] = value;
+            }
+          } else {
+            (changedData as any)[key] = value;
+          }
         }
       });
 
