@@ -163,7 +163,7 @@ export default function PersonEditModal({
             style={styles.backButton}
             onPress={handleClose}
           >
-            <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+            <Ionicons name="chevron-back" size={28} color={rose_theme.white} />
           </TouchableOpacity>
           <Text style={styles.editModalHeaderTitle}>Editar Cadastro</Text>
           <View style={styles.backButton} />
@@ -342,10 +342,10 @@ export default function PersonEditModal({
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <ActivityIndicator color="#FFFFFF" size="small" />
+                <ActivityIndicator color={rose_theme.white} size="small" />
               ) : (
                 <>
-                  <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+                  <Ionicons name="checkmark" size={20} color={rose_theme.white} />
                   <Text style={styles.saveButtonText}>Salvar Alterações</Text>
                 </>
               )}

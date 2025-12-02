@@ -79,7 +79,7 @@ title: {
 },
 card: { 
     flexDirection: 'row', 
-    backgroundColor: '#FFFFFF', 
+    backgroundColor: rose_theme.white, 
     padding: 15, 
     borderRadius: 10, 
     marginBottom: 10, 
@@ -99,7 +99,7 @@ cardRight: {
 cardTime: { 
     fontSize: 18, 
     fontWeight: 'bold', 
-    color: '#333' 
+    color: rose_theme.light_text_primary 
 },
 cardSubject: { 
     fontSize: 18, 
@@ -112,12 +112,12 @@ cardSubject: {
 },
 cardLocation: { 
     fontSize: 14, 
-    color: '#555', 
+    color: rose_theme.light_text_secondary, 
     fontStyle: 'italic' 
 },
 cardNote: { 
     fontSize: 14, 
-    color: '#666', 
+    color: rose_theme.light_text_secondary, 
     marginTop: 5 
 },
 emptyText: { 
@@ -166,13 +166,13 @@ notesSectionTitle: {
 },
 noteCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: rose_theme.white,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
-    shadowColor: '#000',
+    shadowColor: rose_theme.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -191,7 +191,7 @@ noteCardRight: {
 noteCardTime: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: rose_theme.light_text_primary,
 },
 noteCardSubject: {
     fontSize: 16,
@@ -204,19 +204,19 @@ noteCardSubject: {
 },
 noteCardTrainer: {
     fontSize: 13,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     marginTop: 3,
     fontStyle: 'italic',
 },
 noteCardDate: {
     fontSize: 12,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     marginTop: 3,
     fontStyle: 'italic',
 },
 noteCardLocation: {
     fontSize: 14,
-    color: '#555',
+    color: rose_theme.light_text_secondary,
     fontStyle: 'italic',
 },
 modalTitle: {
@@ -230,7 +230,7 @@ modalTitle: {
     textAlign: 'center',
 },
 modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: rose_theme.white,
     borderRadius: 10,
     padding: 20,
 },
@@ -240,18 +240,18 @@ modalRow: {
     alignItems: 'flex-start',
     marginBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: rose_theme.light_border,
     paddingBottom: 10,
 },
 modalLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: rose_theme.light_text_primary,
     flex: 1,
 },
 modalValue: {
     fontSize: 16,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     flex: 2,
     textAlign: 'right',
 },

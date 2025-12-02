@@ -247,7 +247,7 @@ export default function Person() {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
+          <ActivityIndicator size="large" color={rose_theme.white} />
           <Text style={styles.loadingText}>Carregando pessoas...</Text>
         </View>
       </View>
@@ -257,11 +257,11 @@ export default function Person() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <Ionicons name="people" size={32} color="#FFFFFF" />
+        <Ionicons name="people" size={32} color={rose_theme.white} />
         <Text style={styles.title}>Lista de Pessoas</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity style={styles.iconButton} onPress={() => setShowFilterModal(true)}>
-            <Ionicons name="search" size={24} color="#FFFFFF" />
+            <Ionicons name="search" size={24} color={rose_theme.white} />
             {(searchName || roleFilter !== 'all') && (
               <View style={styles.filterIndicator}>
                 <View style={styles.filterDot} />
@@ -269,7 +269,7 @@ export default function Person() {
             )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
-            <Ionicons name="refresh" size={24} color="#FFFFFF" />
+            <Ionicons name="refresh" size={24} color={rose_theme.white} />
           </TouchableOpacity>
         </View>
       </View>
@@ -310,19 +310,19 @@ export default function Person() {
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[rose_theme.rose_main]}
-            tintColor="#FFFFFF"
+            tintColor={rose_theme.white}
           />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="people-outline" size={64} color="#CCCCCC" />
+            <Ionicons name="people-outline" size={64} color={rose_theme.disabled_text} />
             <Text style={styles.emptyText}>Nenhuma pessoa encontrada</Text>
           </View>
         }
       />
       
       <TouchableOpacity style={styles.floatingButton} onPress={() => router.push('/personAdd')}>
-        <Ionicons name="add" size={28} color="#FFFFFF" />
+        <Ionicons name="add" size={28} color={rose_theme.white} />
       </TouchableOpacity>
 
       {/* Filter Modal */}
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
     flex: 1,
     textAlign: 'center',
   },
@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: rose_theme.shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -542,11 +542,11 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
   statLabel: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: rose_theme.white,
     marginTop: 4,
   },
   listContainer: {
@@ -554,11 +554,11 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: rose_theme.white,
     borderRadius: 15,
     padding: 20,
     marginBottom: 15,
-    shadowColor: '#000',
+    shadowColor: rose_theme.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -576,12 +576,12 @@ const styles = StyleSheet.create({
   personName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: rose_theme.light_text_primary,
     marginBottom: 8,
   },
   personId: {
     fontSize: 14,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     fontWeight: '600',
   },
   badgeContainer: {
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
   cardContent: {
     gap: 12,
@@ -614,12 +614,12 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: rose_theme.light_text_primary,
     minWidth: 80,
   },
   infoValue: {
     fontSize: 14,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     flex: 1,
   },
   loadingContainer: {
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: rose_theme.white,
     marginTop: 16,
   },
   emptyContainer: {
@@ -639,7 +639,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#CCCCCC',
+    color: rose_theme.disabled_text,
     marginTop: 16,
   },
   // Modal styles
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: rose_theme.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
@@ -662,12 +662,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: rose_theme.light_border,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: rose_theme.light_text_primary,
   },
   closeButton: {
     padding: 5,
@@ -678,13 +678,13 @@ const styles = StyleSheet.create({
   filterLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: rose_theme.light_text_primary,
     marginBottom: 10,
   },
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: rose_theme.light_bg_secondary,
     borderRadius: 10,
     paddingHorizontal: 15,
     height: 50,
@@ -695,7 +695,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.light_text_primary,
   },
   clearSearchButton: {
     padding: 5,
@@ -709,9 +709,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: rose_theme.light_disabled,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: rose_theme.light_border,
   },
   sortButtonActive: {
     backgroundColor: rose_theme.rose_main,
@@ -719,11 +719,11 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: 14,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     fontWeight: '500',
   },
   sortButtonTextActive: {
-    color: '#FFFFFF',
+    color: rose_theme.white,
     fontWeight: 'bold',
   },
   roleOptions: {
@@ -735,9 +735,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 15,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: rose_theme.light_disabled,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: rose_theme.light_border,
     marginBottom: 8,
   },
   roleButtonActive: {
@@ -746,11 +746,11 @@ const styles = StyleSheet.create({
   },
   roleButtonText: {
     fontSize: 12,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     fontWeight: '500',
   },
   roleButtonTextActive: {
-    color: '#FFFFFF',
+    color: rose_theme.white,
     fontWeight: 'bold',
   },
   filterActions: {
@@ -763,12 +763,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     borderRadius: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: rose_theme.light_bg_secondary,
     alignItems: 'center',
   },
   clearButtonText: {
     fontSize: 16,
-    color: '#666',
+    color: rose_theme.light_text_secondary,
     fontWeight: '600',
   },
   applyButton: {
@@ -780,7 +780,7 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: rose_theme.white,
     fontWeight: 'bold',
   },
   // Edit modal styles
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
     borderColor: rose_theme.rose_main,
   },
   inputDisabled: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: rose_theme.dark_input_bg,
     opacity: 0.7,
   },
   dateInput: {
@@ -874,7 +874,7 @@ const styles = StyleSheet.create({
   },
   stateButtonTextActive: {
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
   passwordSection: {
     marginTop: 24,
@@ -890,11 +890,11 @@ const styles = StyleSheet.create({
   },
   sectionSubtitle: {
     fontSize: 12,
-    color: '#999',
+    color: rose_theme.dark_subtitle,
     marginBottom: 16,
   },
   saveButton: {
-    backgroundColor: '#27ae60',
+    backgroundColor: rose_theme.success_green,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -906,7 +906,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: rose_theme.white,
     fontWeight: '600',
   },
   buttonDisabled: {
@@ -930,7 +930,7 @@ const styles = StyleSheet.create({
   editModalHeaderTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
   backButton: {
     width: 40,

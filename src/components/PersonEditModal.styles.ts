@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: rose_theme.rose_dark,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    borderBottomColor: rose_theme.dark_border,
   },
 
   backButton: {
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   editModalHeaderTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
 
   // Keyboard and ScrollView
@@ -62,19 +62,19 @@ export const styles = StyleSheet.create({
 
   input: {
     borderWidth: 1,
-    borderColor: '#3a3a3a',
+    borderColor: rose_theme.dark_border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: rose_theme.white,
     backgroundColor: rose_theme.dark_surface,
   },
 
   // Date Input
   dateInput: {
     borderWidth: 1,
-    borderColor: '#3a3a3a',
+    borderColor: rose_theme.dark_border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -86,20 +86,20 @@ export const styles = StyleSheet.create({
 
   dateInputText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
 
   // Picker
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#3a3a3a',
+    borderColor: rose_theme.dark_border,
     borderRadius: 8,
     backgroundColor: rose_theme.dark_surface,
     overflow: 'hidden',
   },
 
   picker: {
-    color: '#FFFFFF',
+    color: rose_theme.white,
     backgroundColor: rose_theme.dark_surface,
   },
 
@@ -114,7 +114,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: '#3a3a3a',
+    borderColor: rose_theme.dark_border,
     borderRadius: 8,
     backgroundColor: rose_theme.dark_surface,
     alignItems: 'center',
@@ -128,16 +128,16 @@ export const styles = StyleSheet.create({
   stateButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
 
   stateButtonTextActive: {
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
 
   // Password Section
   passwordSection: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: rose_theme.dark_section_bg,
     borderRadius: 8,
     padding: 16,
     marginBottom: 20,
@@ -148,20 +148,20 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
     marginBottom: 4,
   },
 
   sectionSubtitle: {
     fontSize: 12,
-    color: '#999',
+    color: rose_theme.dark_subtitle,
     marginBottom: 16,
   },
 
   // Save Button
   saveButton: {
     flexDirection: 'row',
-    backgroundColor: '#4CAF50',
+    backgroundColor: rose_theme.success,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -175,7 +175,7 @@ export const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: rose_theme.white,
   },
 
   buttonDisabled: {
