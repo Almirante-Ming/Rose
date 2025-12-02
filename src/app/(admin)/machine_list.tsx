@@ -10,13 +10,14 @@ import {
   StyleSheet,
   Modal,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { machinesService } from '@/services';
 import { rose_theme } from '@constants/rose_theme';
-import { MachineResponse } from '@constants/types';
+import { MachineResponse, Machine_Status } from '@constants/types';
 
 export default function MachineList() {
   const [machines, setMachines] = useState<MachineResponse[]>([]);
@@ -24,6 +25,10 @@ export default function MachineList() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingMachine, setEditingMachine] = useState<MachineResponse | null>(null);
+  const [editFormData, setEditFormData] = useState({ name: '', description: '', state: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [sortBy, setSortBy] = useState<'id' | 'name'>('id');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -85,6 +90,93 @@ export default function MachineList() {
     applyFiltersAndSort(machines, '', 'id', 'asc');
   };
 
+  const handleOpenEditModal = (machine: MachineResponse) => {
+    setEditingMachine(machine);
+    setEditFormData({
+      name: machine.name,
+      description: machine.description || '',
+      state: (machine.m_state || Machine_Status.ACTIVE) as string,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setEditingMachine(null);
+    setEditFormData({ name: '', description: '', state: '' });
+  };
+
+  const handleUpdateMachine = async () => {
+    if (!editingMachine || !editFormData.name.trim()) {
+      Alert.alert('Erro', 'Nome da atividade é obrigatório');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await machinesService.updateMachine(editingMachine.id, {
+        name: editFormData.name.trim(),
+        description: editFormData.description.trim(),
+        state: editFormData.state as string,
+      });
+
+      Alert.alert('Sucesso', 'Atividade atualizada com sucesso!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            handleCloseEditModal();
+            fetchMachines();
+          },
+        },
+      ]);
+    } catch (error: any) {
+      Alert.alert(
+        'Erro',
+        error.response?.data?.message || 'Erro ao atualizar atividade. Tente novamente.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteMachine = async () => {
+    if (!editingMachine) return;
+
+    Alert.alert(
+      'Confirmar exclusão',
+      `Tem certeza que deseja deletar a atividade "${editingMachine.name}"?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Deletar',
+          style: 'destructive',
+          onPress: async () => {
+            setIsSubmitting(true);
+            try {
+              await machinesService.deleteMachine(editingMachine.id);
+              Alert.alert('Sucesso', 'Atividade deletada com sucesso!', [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    handleCloseEditModal();
+                    fetchMachines();
+                  },
+                },
+              ]);
+            } catch (error: any) {
+              Alert.alert(
+                'Erro',
+                error.response?.data?.message || 'Erro ao deletar atividade. Tente novamente.'
+              );
+            } finally {
+              setIsSubmitting(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const fetchMachines = async () => {
     try {
       setIsLoading(true);
@@ -94,7 +186,7 @@ export default function MachineList() {
     } catch (error: any) {
       Alert.alert(
         'Erro',
-        error.response?.data?.message || 'Erro ao carregar lista de máquinas. Tente novamente.'
+        error.response?.data?.message || 'Erro ao carregar lista de atividades. Tente novamente.'
       );
     } finally {
       setIsLoading(false);
@@ -113,14 +205,12 @@ export default function MachineList() {
 
   const getStateLabel = (state: string): string => {
     switch (state) {
-      case 'active':
+      case Machine_Status.ACTIVE:
         return 'Disponível';
-      case 'maintenance':
-        return 'Em Análise';
-      case 'inactive':
+      case Machine_Status.MAINTENANCE:
+        return 'Em Manutenção';
+      case Machine_Status.INACTIVE:
         return 'Indisponível';
-      case 'deactive':
-        return 'Desativado';
       default:
         return state;
     }
@@ -128,30 +218,31 @@ export default function MachineList() {
 
   const getStateColor = (state: string): string => {
     switch (state) {
-      case 'active':
+      case Machine_Status.ACTIVE:
         return '#27ae60';
-      case 'maintenance':
+      case Machine_Status.MAINTENANCE:
         return '#f39c12';
-      case 'inactive':
+      case Machine_Status.INACTIVE:
         return '#e74c3c';
-      case 'deactive':
-        return '#7f8c8d';
       default:
         return '#7f8c8d';
     }
   };
 
   const renderMachineCard = ({ item }: { item: MachineResponse }) => (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card}
+      onPress={() => handleOpenEditModal(item)}
+      activeOpacity={0.7}
+    >
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <Text style={styles.machineName}>{item.name}</Text>
-          <Text style={styles.machineId}>#{item.id}</Text>
         </View>
         
         <View style={styles.rightSection}>
-          <View style={[styles.stateBadge, { backgroundColor: getStateColor(item.state) }]}>
-            <Text style={styles.badgeText}>{getStateLabel(item.state)}</Text>
+          <View style={[styles.stateBadge, { backgroundColor: getStateColor(item.m_state || item.state || 'active') }]}>
+            <Text style={styles.badgeText}>{getStateLabel(item.m_state || item.state || 'active')}</Text>
           </View>
         </View>
       </View>
@@ -159,7 +250,7 @@ export default function MachineList() {
       {item.description && (
         <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 
   if (isLoading) {
@@ -295,6 +386,113 @@ export default function MachineList() {
           </View>
         </View>
       </Modal>
+
+      {/* Edit Machine Modal */}
+      <Modal
+        visible={showEditModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleCloseEditModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Editar Atividade</Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handleCloseEditModal}
+              >
+                <Ionicons name="close" size={24} color={rose_theme.text_light} />
+              </TouchableOpacity>
+            </View>
+
+            {editingMachine && (
+              <ScrollView style={styles.editFormContainer} showsVerticalScrollIndicator={false}>
+                {/* Machine Name */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Nome da Atividade *</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={editFormData.name}
+                    onChangeText={(text) => setEditFormData({ ...editFormData, name: text })}
+                    placeholder="Digite o nome"
+                    placeholderTextColor="#999"
+                  />
+                </View>
+
+                {/* Machine Description */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Descrição</Text>
+                  <TextInput
+                    style={[styles.input, styles.textArea]}
+                    value={editFormData.description}
+                    onChangeText={(text) => setEditFormData({ ...editFormData, description: text })}
+                    placeholder="Digite a descrição"
+                    placeholderTextColor="#999"
+                    multiline
+                    numberOfLines={4}
+                  />
+                </View>
+
+                {/* Machine State */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Status</Text>
+                  <View style={styles.stateButtonsContainer}>
+                    {[Machine_Status.ACTIVE, Machine_Status.MAINTENANCE, Machine_Status.INACTIVE].map((state) => {
+                      const isSelected = editFormData.state.toString().trim() === state.toString().trim();
+                      return (
+                        <TouchableOpacity
+                          key={state}
+                          style={[
+                            styles.stateButton,
+                            isSelected && styles.stateButtonActive,
+                          ]}
+                          onPress={() => setEditFormData({ ...editFormData, state })}
+                        >
+                          <Text
+                            style={[
+                              styles.stateButtonText,
+                              isSelected && styles.stateButtonTextActive,
+                            ]}
+                          >
+                            {getStateLabel(state)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </View>
+
+                {/* Action Buttons */}
+                <View style={styles.editActionButtons}>
+                  <TouchableOpacity
+                    style={[styles.deleteButton, isSubmitting && styles.buttonDisabled]}
+                    onPress={handleDeleteMachine}
+                    disabled={isSubmitting}
+                  >
+                    <Ionicons name="trash" size={20} color="#FFFFFF" />
+                    <Text style={styles.deleteButtonText}>Deletar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.saveButton, isSubmitting && styles.buttonDisabled]}
+                    onPress={handleUpdateMachine}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <ActivityIndicator color="#FFFFFF" size="small" />
+                    ) : (
+                      <>
+                        <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+                        <Text style={styles.saveButtonText}>Salvar</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -427,28 +625,30 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    maxHeight: '70%',
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    margin: 20,
+    maxHeight: '80%',
+    width: '90%',
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
-    paddingBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    padding: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: rose_theme.text_light,
   },
   closeButton: {
     padding: 5,
@@ -459,16 +659,18 @@ const styles = StyleSheet.create({
   filterLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: rose_theme.text_light,
     marginBottom: 10,
   },
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
     paddingHorizontal: 15,
     height: 50,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
   },
   searchIcon: {
     marginRight: 10,
@@ -476,7 +678,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_light,
   },
   clearSearchButton: {
     padding: 5,
@@ -489,10 +691,10 @@ const styles = StyleSheet.create({
   sortButton: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#F0F0F0',
+    borderRadius: 8,
+    backgroundColor: rose_theme.dark_surface,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: rose_theme.rose_main,
   },
   sortButtonActive: {
     backgroundColor: rose_theme.rose_main,
@@ -500,7 +702,7 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: 14,
-    color: '#666',
+    color: rose_theme.text_light,
     fontWeight: '500',
   },
   sortButtonTextActive: {
@@ -517,12 +719,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     borderRadius: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: rose_theme.dark_surface,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
   },
   clearButtonText: {
     fontSize: 16,
-    color: '#666',
+    color: rose_theme.text_light,
     fontWeight: '600',
   },
   applyButton: {
@@ -536,5 +740,94 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     fontWeight: 'bold',
+  },
+  // Edit form styles
+  editFormContainer: {
+    padding: 20,
+    paddingBottom: 30,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: rose_theme.text_light,
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: rose_theme.text_light,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  textArea: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  stateButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  stateButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: rose_theme.dark_surface,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  stateButtonActive: {
+    backgroundColor: rose_theme.rose_main,
+  },
+  stateButtonText: {
+    fontSize: 14,
+    color: rose_theme.text_light,
+    fontWeight: '500',
+  },
+  stateButtonTextActive: {
+    fontWeight: '600',
+  },
+  editActionButtons: {
+    flexDirection: 'row',
+    gap: 15,
+    marginTop: 20,
+  },
+  saveButton: {
+    flex: 1,
+    backgroundColor: '#27ae60',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 10,
+    gap: 8,
+  },
+  saveButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: '#e74c3c',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 10,
+    gap: 8,
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
 });
