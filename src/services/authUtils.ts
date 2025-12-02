@@ -145,5 +145,34 @@ export const authUtils = {
             console.error('API status check failed:', error);
             return { success: false, message: 'Falha ao conectar ao Tinto, contacte o suporte' };
         }
+    },
+
+    async refreshToken(): Promise<{ success: boolean; error?: string }> {
+        try {
+            const currentToken = await authService.getToken();
+            if (!currentToken) {
+                return { success: false, error: 'No token found' };
+            }
+
+            // POST /refresh with Authorization header (added automatically by apiService interceptor)
+            const response = await apiService.post<{ access_token: string; token_type: string }>('/refresh');
+
+            if (response && response.access_token) {
+                const newToken = response.access_token;
+                await authService.saveToken(newToken);
+
+                const user = await authService.createUserFromToken(newToken);
+                if (user) {
+                    await authService.saveUser(user);
+                }
+
+                return { success: true };
+            }
+
+            return { success: false, error: 'No access_token in response' };
+        } catch (error: any) {
+            console.error('Token refresh failed:', error);
+            return { success: false, error: error.message || 'Token refresh failed' };
+        }
     }
 };

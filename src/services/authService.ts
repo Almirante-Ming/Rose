@@ -229,5 +229,28 @@ export const authService = {
             console.error('Error deleting password:', error);
             throw error;
         }
+    },
+
+    getTokenExpirationTime(token: string): number | null {
+        try {
+            const decoded = this.parseJwtToken(token);
+            if (!decoded || !decoded.exp) return null;
+            return decoded.exp * 1000;
+        } catch (error) {
+            console.error('Error getting token expiration time:', error);
+            return null;
+        }
+    },
+
+    getTimeUntilExpiration(token: string): number {
+        const expirationTime = this.getTokenExpirationTime(token);
+        if (!expirationTime) return 0;
+        return expirationTime - Date.now();
+    },
+
+    isTokenAboutToExpire(token: string, minutesThreshold: number = 5): boolean {
+        const timeUntilExpiration = this.getTimeUntilExpiration(token);
+        const thresholdMs = minutesThreshold * 60 * 1000;
+        return timeUntilExpiration <= thresholdMs && timeUntilExpiration > 0;
     }
 };

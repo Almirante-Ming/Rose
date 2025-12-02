@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useRef, ReactNode } from 'react';
 import { authUtils, configService } from '@/services';
 import { AuthUser, UserRole } from '@constants/types';
 
@@ -13,6 +13,8 @@ interface AuthContextType {
     hasPermission: (permission: string) => boolean;
     isAdmin: () => boolean;
     isTrainer: () => boolean;
+    refreshToken: () => Promise<{ success: boolean; error?: string }>;
+    isRefreshing: boolean;
 }
 
 export type { AuthContextType };
@@ -28,6 +30,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<AuthUser | null>(null);
     const [userRole, setUserRole] = useState<UserRole | null>(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const checkAuth = async () => {
         try {
@@ -108,9 +112,74 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return userRole ? userRole.level >= 1 : false;
     };
 
+    const refreshToken = async (): Promise<{ success: boolean; error?: string }> => {
+        setIsRefreshing(true);
+        try {
+            const result = await authUtils.refreshToken();
+            if (result.success) {
+                const currentUser = await authUtils.getCurrentUser();
+                const currentUserRole = await authUtils.getCurrentUserRole();
+                setUser(currentUser);
+                setUserRole(currentUserRole);
+                
+                // Trigger route change if role has changed
+                const { router } = await import('expo-router');
+                if (currentUserRole?.level === 2) {
+                    router.replace('/(admin)/home');
+                } else if (currentUserRole?.level === 1) {
+                    router.replace('/(trainer)/home');
+                } else {
+                    router.replace('/(user)/home');
+                }
+                
+                setupTokenMonitoring();
+            }
+            return result;
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
+
+    const setupTokenMonitoring = () => {
+        if (refreshIntervalRef.current) {
+            clearInterval(refreshIntervalRef.current);
+        }
+
+        const checkAndRefreshToken = async () => {
+            try {
+                const { authService } = await import('@/services');
+                const token = await authService.getToken();
+                if (!token) return;
+
+                if (authService.isTokenAboutToExpire(token, 5)) {
+                    const result = await refreshToken();
+                    if (!result.success) {
+                        await logout();
+                    }
+                }
+            } catch (error) {
+                console.error('Token monitoring error:', error);
+            }
+        };
+
+        refreshIntervalRef.current = setInterval(checkAndRefreshToken, 60000) as unknown as NodeJS.Timeout;
+    };
+
     useEffect(() => {
         checkAuth();
     }, []);
+
+    useEffect(() => {
+        if (isAuthenticated && !isRefreshing) {
+            setupTokenMonitoring();
+        }
+
+        return () => {
+            if (refreshIntervalRef.current) {
+                clearInterval(refreshIntervalRef.current);
+            }
+        };
+    }, [isAuthenticated, isRefreshing]);
 
     const value: AuthContextType = {
         isAuthenticated,
@@ -123,6 +192,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         hasPermission,
         isAdmin,
         isTrainer,
+        refreshToken,
+        isRefreshing,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
