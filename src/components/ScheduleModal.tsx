@@ -48,7 +48,6 @@ export default function ScheduleModal({
 
         setIsLoading(true);
         try {
-            // Create updated schedule with cancel reason in message
             const updatedSchedule = {
                 ...selectedNote,
                 message: cancelReason.trim() || selectedNote.message
@@ -83,6 +82,13 @@ export default function ScheduleModal({
     const handleCancelModalClose = () => {
         setShowCancelModal(false);
         setCancelReason('');
+    };
+
+    const formatDateDisplay = (dateString: string): string => {
+        // Convert yyyy-mm-dd to dd/mm/yyyy
+        if (!dateString || dateString.length !== 10) return dateString;
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
     };
 
     const handleReschedulePress = () => {
@@ -221,7 +227,7 @@ export default function ScheduleModal({
                                     <View style={rose_home.modalContent}>
                                     <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Data:</Text>
-                                        <Text style={rose_home.modalValue}>{selectedNote.dt_init}</Text>
+                                        <Text style={rose_home.modalValue}>{formatDateDisplay(selectedNote.dt_init)}</Text>
                                     </View>
                                     <View style={rose_home.modalRow}>
                                         <Text style={rose_home.modalLabel}>Horário:</Text>
@@ -277,7 +283,7 @@ export default function ScheduleModal({
                                         {selectedNote?.c_status === 'reserved' ? (
                                             canConfirm ? (
                                                 <TouchableOpacity 
-                                                    style={[styles.actionButton, styles.confirmButton]}
+                                                    style={[styles.actionButton, styles.confirmButton, { backgroundColor: '#27ae60' }]}
                                                     onPress={handleConfirmReserved}
                                                     disabled={isLoading}
                                                 >
@@ -292,7 +298,7 @@ export default function ScheduleModal({
                                             )
                                         ) : (
                                             <TouchableOpacity 
-                                                style={[styles.actionButton, styles.rescheduleButton]}
+                                                style={[styles.actionButton, styles.rescheduleButton, { backgroundColor: '#f39c12' }]}
                                                 onPress={handleReschedulePress}
                                             >
                                                 <Ionicons name="time" size={20} color="#FFFFFF" />
@@ -461,7 +467,7 @@ const styles = {
         gap: 15,
         paddingTop: 15,
         borderTopWidth: 1,
-        borderTopColor: 'rgba(255, 255, 255, 0.2)',
+        borderTopColor: rose_theme.rose_main,
     },
     actionButton: {
         flex: 1,
@@ -474,26 +480,26 @@ const styles = {
         gap: 8,
     },
     cancelButton: {
-        backgroundColor: '#e74c3c',
-    },
-    rescheduleButton: {
-        backgroundColor: '#f39c12', // Yellow-orange color for remarcar
+        backgroundColor: rose_theme.rose_main,
     },
     confirmButton: {
-        backgroundColor: '#27ae60', // Green color for confirmar
+        // backgroundColor will be overridden to green (#27ae60) when c_status is 'reserved'
+    },
+    rescheduleButton: {
+        // backgroundColor will be overridden to yellow-orange (#f39c12) when c_status is 'marked'
     },
     cancelButtonText: {
-        color: '#FFFFFF',
+        color: rose_theme.text_light,
         fontSize: 16,
         fontWeight: '600' as const,
     },
     rescheduleButtonText: {
-        color: '#FFFFFF',
+        color: rose_theme.text_light,
         fontSize: 16,
         fontWeight: '600' as const,
     },
     confirmButtonText: {
-        color: '#FFFFFF',
+        color: rose_theme.text_light,
         fontSize: 16,
         fontWeight: '600' as const,
     },
@@ -505,11 +511,13 @@ const styles = {
         padding: 20,
     },
     cancelModalContainer: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: rose_theme.light_surface,
         borderRadius: 15,
         padding: 20,
         width: '100%' as const,
         maxWidth: 400,
+        borderWidth: 2,
+        borderColor: rose_theme.rose_main,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
@@ -519,24 +527,27 @@ const styles = {
     cancelModalTitle: {
         fontSize: 20,
         fontWeight: 'bold' as const,
-        color: '#333',
+        color: rose_theme.text_dark,
         textAlign: 'center' as const,
         marginBottom: 10,
+        borderBottomWidth: 2,
+        borderBottomColor: rose_theme.rose_main,
+        paddingBottom: 10,
     },
     cancelModalSubtitle: {
         fontSize: 16,
-        color: '#666',
+        color: rose_theme.text_secondary,
         textAlign: 'center' as const,
         marginBottom: 20,
     },
     cancelInput: {
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: rose_theme.rose_main,
         borderRadius: 8,
         padding: 15,
         fontSize: 16,
-        color: '#333',
-        backgroundColor: '#f9f9f9',
+        color: rose_theme.text_dark,
+        backgroundColor: rose_theme.light_bg,
         minHeight: 100,
         marginBottom: 20,
     },
@@ -554,18 +565,18 @@ const styles = {
         justifyContent: 'center' as const,
     },
     cancelModalCancelButton: {
-        backgroundColor: '#95a5a6',
+        backgroundColor: rose_theme.gray_dark,
     },
     cancelModalConfirmButton: {
-        backgroundColor: '#e74c3c',
+        backgroundColor: rose_theme.rose_main,
     },
     cancelModalCancelText: {
-        color: '#FFFFFF',
+        color: rose_theme.text_light,
         fontSize: 16,
         fontWeight: '600' as const,
     },
     cancelModalConfirmText: {
-        color: '#FFFFFF',
+        color: rose_theme.text_light,
         fontSize: 16,
         fontWeight: '600' as const,
     },
@@ -583,13 +594,13 @@ const styles = {
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderRadius: 8,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: rose_theme.rose_main,
-        backgroundColor: '#f9f9f9',
+        backgroundColor: rose_theme.light_bg,
         gap: 8,
     },
     dateTimeButtonText: {
-        color: '#333',
+        color: rose_theme.text_dark,
         fontSize: 16,
         fontWeight: '500' as const,
     },

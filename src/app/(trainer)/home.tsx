@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, Animated, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Alert, ActivityIndicator } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { rose_home } from '@/styles';
 import { Note, NotesData, CalendarDay } from '@constants/types';
 import { schedulesService } from '@/services';
 import { useAuth } from '@/contexts';
+import { Ionicons } from '@expo/vector-icons';
+import { rose_theme } from '@constants/rose_theme';
 import { Calendar, ScheduleModal, ScheduleList } from '@/components';
 
 
@@ -17,7 +19,17 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isScrolledToEnd, setIsScrolledToEnd] = useState<boolean>(false);
 
-    const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, user, logout, refreshToken, isRefreshing } = useAuth();
+
+    const handleRefreshToken = async () => {
+        const result = await refreshToken();
+        if (result.success) {
+            Alert.alert('Sucesso', 'Autenticação atualizada com sucesso!');
+            await refreshHomePage();
+        } else {
+            Alert.alert('Erro', result.error || 'Falha ao atualizar autenticação');
+        }
+    };
 
     const fetchSchedules = async () => {
         setIsLoading(true);
@@ -144,9 +156,20 @@ export default function Home() {
                     <Text style={rose_home.welcomeText}>Olá, {user?.email || 'Usuário'}</Text>
                     <Text style={rose_home.roleText}>
                         {user?.role.name === 'admin' ? 'Administrador' : 
-                         user?.role.name === 'trainer' ? 'Instrutor':'Cliente'}
+                         user?.role.name === 'trainer' ? 'Instrutor':''}
                     </Text>
                 </View>
+                <TouchableOpacity 
+                    style={rose_home.logoutButton} 
+                    onPress={handleRefreshToken}
+                    disabled={isRefreshing}
+                >
+                    {isRefreshing ? (
+                        <ActivityIndicator color={rose_theme.rose_main} size="small" />
+                    ) : (
+                        <Ionicons name="reload" size={16} color={rose_theme.rose_main} />
+                    )}
+                </TouchableOpacity>
                 <TouchableOpacity style={rose_home.logoutButton} onPress={handleLogout}>
                     <Text style={rose_home.logoutText}>Sair</Text>
                 </TouchableOpacity>

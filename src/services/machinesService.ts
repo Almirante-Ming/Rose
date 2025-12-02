@@ -31,6 +31,25 @@ class MachinesService {
       throw error;
     }
   }
+
+  async updateMachine(id: number, machineData: Partial<MachineData>): Promise<MachineResponse> {
+    try {
+      const response = await apiService.put<MachineResponse>(`/machines/${id}`, machineData);
+      return response;
+    } catch (error) {
+      console.error('Error updating machine:', error);
+      throw error;
+    }
+  }
+
+  async deleteMachine(id: number): Promise<void> {
+    try {
+      await apiService.delete<void>(`/machines/${id}`);
+    } catch (error) {
+      console.error('Error deleting machine:', error);
+      throw error;
+    }
+  }
 }
 
 export const machinesService = new MachinesService();

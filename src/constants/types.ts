@@ -1,3 +1,9 @@
+export enum Machine_Status {
+    ACTIVE = "active",
+    MAINTENANCE = "maintenance",
+    INACTIVE = "inactive",
+}
+
 export interface Note {
     schedule_id: number;
     date: any;
@@ -81,12 +87,15 @@ export interface ScheduleResponse extends ScheduleData {
 
 export interface MachineData {
     name: string;
-    m_state: 'active' | 'maintenance' | 'inactive' ;
+    description?: string;
+    m_state?: Machine_Status | string;
+    state?: Machine_Status | string;
 }
 
 export interface MachineResponse {
     id: number;
     name: string;
     description?: string;
-    state: string;
+    state?: Machine_Status | string;
+    m_state?: Machine_Status | string;
 }

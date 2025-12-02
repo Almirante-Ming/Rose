@@ -4,7 +4,7 @@ import { rose_theme } from '@constants/rose_theme';
 export const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: rose_theme.rose_dark,
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -17,7 +17,7 @@ export const loginStyles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#b3b3b3',
+    color: rose_theme.subtitle,
     textAlign: 'center',
     marginBottom: 40,
   },
@@ -27,22 +27,22 @@ export const loginStyles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#e0e0e0',
+    color: rose_theme.light_bg_secondary,
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#404040',
+    borderColor: rose_theme.dark_border,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    backgroundColor: '#1e1e1e',
-    color: '#ffffff',
+    backgroundColor: rose_theme.dark_input_bg,
+    color: rose_theme.white,
   },
   inputFocused: {
     borderColor: rose_theme.rose_light,
-    backgroundColor: '#2a2a2a',
+    backgroundColor: rose_theme.dark_surface,
   },
   passwordContainer: {
     position: 'relative',
@@ -67,7 +67,7 @@ export const loginStyles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#606060',
+    borderColor: rose_theme.dark_border,
     borderRadius: 4,
     marginRight: 12,
     justifyContent: 'center',
@@ -78,13 +78,13 @@ export const loginStyles = StyleSheet.create({
     borderColor: rose_theme.rose_light,
   },
   checkboxIcon: {
-    color: '#fff',
+    color: rose_theme.white,
     fontSize: 12,
     fontWeight: 'bold',
   },
   checkboxLabel: {
     fontSize: 14,
-    color: '#b3b3b3',
+    color: rose_theme.subtitle,
     flex: 1,
   },
   loginButton: {
@@ -95,10 +95,10 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonDisabled: {
-    backgroundColor: '#4a4a4a',
+    backgroundColor: rose_theme.dark_border,
   },
   loginButtonText: {
-    color: '#fff',
+    color: rose_theme.white,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -110,7 +110,7 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 20,
   },
   statusButtonText: {
-    color: '#fff',
+    color: rose_theme.white,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -121,7 +121,7 @@ export const loginStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   statusSuccess: {
-    color: '#4caf50',
+    color: rose_theme.success,
   },
   statusError: {
     color: '#f44336',
@@ -143,7 +143,7 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingContainer: {
-    backgroundColor: '#2a2a2a',
+    backgroundColor: rose_theme.dark_surface,
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -151,13 +151,13 @@ export const loginStyles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#e0e0e0',
+    color: rose_theme.light_bg_secondary,
   },
   configButton: {
     position: 'absolute',
     bottom: 30,
     right: 20,
-    backgroundColor: '#404040',
+    backgroundColor: rose_theme.dark_border,
     borderRadius: 25,
     width: 50,
     height: 50,
@@ -165,7 +165,7 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   configButtonText: {
-    color: '#e0e0e0',
+    color: rose_theme.light_bg_secondary,
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -176,7 +176,7 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: rose_theme.dark_input_bg,
     borderRadius: 12,
     padding: 20,
     margin: 20,
@@ -186,7 +186,7 @@ export const loginStyles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#e0e0e0',
+    color: rose_theme.light_bg_secondary,
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -203,13 +203,13 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   modalButtonCancel: {
-    backgroundColor: '#404040',
+    backgroundColor: rose_theme.dark_border,
   },
   modalButtonSave: {
     backgroundColor: rose_theme.rose_main,
   },
   modalButtonText: {
-    color: '#fff',
+    color: rose_theme.white,
     fontSize: 14,
     fontWeight: '600',
   },

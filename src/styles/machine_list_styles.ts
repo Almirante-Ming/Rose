@@ -1,0 +1,337 @@
+import { StyleSheet } from 'react-native';
+import { rose_theme } from '@constants/rose_theme';
+
+export const machineListStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: rose_theme.rose_dark,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: rose_theme.white,
+    flex: 1,
+    textAlign: 'center',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  iconButton: {
+    padding: 8,
+  },
+  refreshButton: {
+    padding: 8,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: rose_theme.rose_lightest,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: rose_theme.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  listContainer: {
+    padding: 20,
+    paddingTop: 10,
+  },
+  card: {
+    backgroundColor: rose_theme.white,
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    shadowColor: rose_theme.shadow,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  mainInfo: {
+    flex: 1,
+  },
+  machineName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: rose_theme.light_text_primary,
+    marginBottom: 2,
+  },
+  machineId: {
+    fontSize: 12,
+    color: rose_theme.light_text_secondary,
+    fontWeight: '500',
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+  },
+  description: {
+    fontSize: 12,
+    color: rose_theme.light_text_secondary,
+    marginTop: 8,
+    fontStyle: 'italic',
+  },
+  badgeContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  stateBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: rose_theme.white,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: rose_theme.white,
+    marginTop: 16,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: rose_theme.disabled_text,
+    marginTop: 16,
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    margin: 20,
+    maxHeight: '80%',
+    width: '90%',
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: rose_theme.text_light,
+  },
+  closeButton: {
+    padding: 5,
+  },
+  filterSection: {
+    marginBottom: 25,
+  },
+  filterLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: rose_theme.text_light,
+    marginBottom: 10,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    height: 50,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: rose_theme.text_light,
+  },
+  clearSearchButton: {
+    padding: 5,
+  },
+  sortOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  sortButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: rose_theme.dark_surface,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  sortButtonActive: {
+    backgroundColor: rose_theme.rose_main,
+    borderColor: rose_theme.rose_main,
+  },
+  sortButtonText: {
+    fontSize: 14,
+    color: rose_theme.text_light,
+    fontWeight: '500',
+  },
+  sortButtonTextActive: {
+    color: rose_theme.white,
+    fontWeight: 'bold',
+  },
+  filterActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 15,
+  },
+  clearButton: {
+    flex: 1,
+    paddingVertical: 15,
+    borderRadius: 10,
+    backgroundColor: rose_theme.dark_surface,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: rose_theme.text_light,
+    fontWeight: '600',
+  },
+  applyButton: {
+    flex: 1,
+    paddingVertical: 15,
+    borderRadius: 10,
+    backgroundColor: rose_theme.rose_main,
+    alignItems: 'center',
+  },
+  applyButtonText: {
+    fontSize: 16,
+    color: rose_theme.white,
+    fontWeight: 'bold',
+  },
+  // Edit form styles
+  editFormContainer: {
+    padding: 20,
+    paddingBottom: 30,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: rose_theme.text_light,
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: rose_theme.text_light,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  textArea: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  stateButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  stateButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: rose_theme.dark_surface,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
+  },
+  stateButtonActive: {
+    backgroundColor: rose_theme.rose_main,
+  },
+  stateButtonText: {
+    fontSize: 14,
+    color: rose_theme.text_light,
+    fontWeight: '500',
+  },
+  stateButtonTextActive: {
+    fontWeight: '600',
+  },
+  editActionButtons: {
+    flexDirection: 'row',
+    gap: 15,
+    marginTop: 20,
+  },
+  saveButton: {
+    flex: 1,
+    backgroundColor: rose_theme.success_green,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 10,
+    gap: 8,
+  },
+  saveButtonText: {
+    fontSize: 16,
+    color: rose_theme.white,
+    fontWeight: '600',
+  },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: '#e74c3c',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 10,
+    gap: 8,
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    color: rose_theme.white,
+    fontWeight: '600',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+});

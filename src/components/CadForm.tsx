@@ -379,7 +379,7 @@ export default function CadForm({ config, isAdmin }: CadFormProps) {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: rose_theme.rose_dark,
+    backgroundColor: rose_theme.dark_bg,
   },
   scrollView: {
     flex: 1,
@@ -407,19 +407,22 @@ const styles = {
   title: {
     fontSize: 24,
     fontWeight: 'bold' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     marginTop: 10,
     textAlign: 'center' as const,
   },
   form: {
-    backgroundColor: rose_theme.rose_light,
+    backgroundColor: rose_theme.dark_surface,
     borderRadius: 15,
     padding: 20,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginBottom: 40,
   },
   inputContainer: {
     marginBottom: 20,
@@ -427,16 +430,17 @@ const styles = {
   label: {
     fontSize: 16,
     fontWeight: '600' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     marginBottom: 8,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
+    borderRadius: 12,
+    padding: 16,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: rose_theme.dark_surface,
+    color: rose_theme.text_light,
   },
   inputError: {
     borderColor: rose_theme.rose_main,
@@ -445,24 +449,29 @@ const styles = {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
   },
   dateText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_light,
   },
   placeholderText: {
-    color: '#999',
+    color: rose_theme.text_secondary,
   },
   pickerContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
     overflow: 'hidden' as const,
   },
   picker: {
-    color: '#333',
-    backgroundColor: '#fff',
+    color: rose_theme.text_light,
+    backgroundColor: rose_theme.dark_surface,
   },
   submitButton: {
     backgroundColor: rose_theme.rose_main,
@@ -474,10 +483,10 @@ const styles = {
     marginTop: 20,
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: rose_theme.gray_light,
   },
   submitButtonText: {
-    color: '#fff',
+    color: rose_theme.text_light,
     fontSize: 18,
     fontWeight: 'bold' as const,
     marginLeft: 8,
@@ -487,7 +496,7 @@ const styles = {
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     padding: 40,
-    backgroundColor: rose_theme.rose_dark,
+    backgroundColor: rose_theme.dark_bg,
   },
   errorText: {
     fontSize: 12,
@@ -496,7 +505,7 @@ const styles = {
   },
   errorSubText: {
     fontSize: 16,
-    color: '#CCCCCC',
+    color: rose_theme.text_secondary,
     textAlign: 'center' as const,
     marginTop: 10,
   },

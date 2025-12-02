@@ -4,7 +4,7 @@ import { PersonData, PersonResponse } from '@constants/types';
 class PersonsService {
   async createPerson(personData: PersonData): Promise<PersonResponse> {
     try {
-      const response = await apiService.post<PersonResponse>('/persons/', personData);
+      const response = await apiService.post<PersonResponse>('/persons', personData);
       return response;
     } catch (error) {
       console.error('Error creating person:', error);

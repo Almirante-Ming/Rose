@@ -1,16 +1,11 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { tabScreenOptions } from '@/styles/tab_styles';
 
 export default function AdminTabLayout() {
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: '#ffd33d',
-        headerStyle: { backgroundColor: '#25292e' },
-        headerShadowVisible: false,
-        headerTintColor: '#fff',
-        tabBarStyle: { backgroundColor: '#25292e' },
-      }}
+      screenOptions={tabScreenOptions}
     >
       <Tabs.Screen
         name="home"
@@ -48,6 +43,16 @@ export default function AdminTabLayout() {
           title: 'Atividades',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'list' : 'list-outline'} color={color} size={24} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={24} />
           ),
           headerShown: false,
         }}

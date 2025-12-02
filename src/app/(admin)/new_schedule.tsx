@@ -62,7 +62,7 @@ const FilterableSelect: React.FC<FilterableSelectProps> = ({
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{placeholder}</Text>
               <TouchableOpacity onPress={() => setIsVisible(false)}>
-                <Ionicons name="close" size={24} color="#333" />
+                <Ionicons name="close" size={24} color={rose_theme.text_light} />
               </TouchableOpacity>
             </View>
 
@@ -200,7 +200,7 @@ export default function NewSchedule() {
       return;
     }
     if (!formData.machine_id) {
-      Alert.alert('Erro', 'Por favor, selecione uma máquina.');
+      Alert.alert('Erro', 'Por favor, selecione uma atividade.');
       return;
     }
 
@@ -215,7 +215,6 @@ export default function NewSchedule() {
           {
             text: 'OK',
             onPress: () => {
-              // Reset form
               setFormData({
                 dt_init: '',
                 tm_init: '',
@@ -316,11 +315,11 @@ export default function NewSchedule() {
 
           {/* Machine Select */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Máquina</Text>
+            <Text style={styles.label}>Atividade</Text>
             <FilterableSelect
               data={machines.map(m => ({ id: m.id, name: m.name }))}
               onSelect={(item) => setFormData(prev => ({ ...prev, machine_id: item.id }))}
-              placeholder="Selecione uma máquina"
+              placeholder="Selecione uma atividade"
               selectedValue={selectedMachine ? { id: selectedMachine.id, name: selectedMachine.name } : null}
             />
           </View>
@@ -385,7 +384,7 @@ export default function NewSchedule() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: rose_theme.rose_dark,
+    backgroundColor: rose_theme.dark_bg,
   },
   scrollContainer: {
     flex: 1,
@@ -397,32 +396,23 @@ const styles = {
   },
   loadingText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
     marginTop: 16,
   },
   header: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    justifyContent: 'center' as const,
     padding: 20,
-    paddingTop: 40,
+    paddingTop: 60,
     gap: 12,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
   },
   form: {
-    backgroundColor: rose_theme.rose_light,
-    borderRadius: 15,
     padding: 20,
-    margin: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     gap: 20,
   },
   inputGroup: {
@@ -431,53 +421,53 @@ const styles = {
   label: {
     fontSize: 16,
     fontWeight: '600' as const,
-    color: '#FFFFFF',
+    color: rose_theme.text_light,
   },
   dateTimeButton: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
   },
   dateTimeButtonText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_light,
   },
   selectButton: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
   },
   selectButtonText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_light,
   },
   placeholder: {
-    color: '#999',
+    color: rose_theme.text_secondary,
   },
   textArea: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    color: '#333',
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
+    color: rose_theme.text_light,
     fontSize: 16,
     minHeight: 80,
   },
   submitButton: {
     backgroundColor: rose_theme.rose_main,
-    borderRadius: 8,
-    padding: 15,
+    borderRadius: 12,
+    padding: 16,
     flexDirection: 'row' as const,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -488,9 +478,9 @@ const styles = {
     opacity: 0.6,
   },
   submitButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold' as const,
-    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600' as const,
+    color: rose_theme.text_light,
   },
   modalOverlay: {
     flex: 1,
@@ -499,36 +489,37 @@ const styles = {
     alignItems: 'center' as const,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    margin: 0,
-    marginTop: 'auto' as any,
+    backgroundColor: rose_theme.dark_surface,
+    borderRadius: 12,
+    margin: 20,
     maxHeight: '80%' as any,
-    width: '100%' as any,
+    width: '90%' as any,
+    borderWidth: 2,
+    borderColor: rose_theme.rose_main,
   },
   modalHeader: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomWidth: 2,
+    borderBottomColor: rose_theme.rose_main,
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold' as const,
-    color: '#333',
+    fontSize: 18,
+    fontWeight: '600' as const,
+    color: rose_theme.text_light,
   },
   searchInput: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    padding: 15,
+    backgroundColor: rose_theme.dark_bg,
+    borderRadius: 8,
+    padding: 12,
     margin: 20,
     marginBottom: 10,
-    color: '#333',
+    color: rose_theme.text_light,
     fontSize: 16,
-    borderWidth: 0,
+    borderWidth: 1,
+    borderColor: rose_theme.rose_main,
   },
   selectList: {
     maxHeight: 300,
@@ -536,10 +527,10 @@ const styles = {
   selectItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: rose_theme.gray_dark,
   },
   selectItemText: {
     fontSize: 16,
-    color: '#333',
+    color: rose_theme.text_light,
   },
 };

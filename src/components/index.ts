@@ -5,3 +5,4 @@ export { default as ScheduleList } from './ScheduleList';
 export { default as CadForm } from './CadForm';
 export { default as PersonForm } from './PersonForm';
 export { default as MachineForm } from './MachineForm';
+export { default as PersonEditModal } from './PersonEditModal';
