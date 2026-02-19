@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "rose",
+    "name": "Rose",
     "slug": "rose",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/rose_icon.png",
     "scheme": "myapp",
@@ -30,6 +30,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "./plugins/withCustomApplicationAttrs.js",
+      ["expo-build-properties", {"android": {"usesCleartextTrafic":true}}],
       "expo-router",
       [
         "expo-splash-screen",
