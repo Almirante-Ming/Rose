@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "rose",
+    "name": "Rose",
     "slug": "rose",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -26,6 +26,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "./plugins/withCustomApplicationAttrs.js",
       "expo-router",
       [
         "expo-splash-screen",
@@ -39,7 +40,8 @@
       "expo-sqlite",
       "expo-font",
       "expo-web-browser",
-      "expo-secure-store"
+      "expo-secure-store",
+      ["expo-build-properties", {"android": {"usesCleartextTrafic":true}}]
     ],
     "experiments": {
       "typedRoutes": true
